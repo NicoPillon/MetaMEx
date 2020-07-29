@@ -54,7 +54,7 @@ server <- function(input, output, session) {
   updateSelectizeInput(session, 'genename_home', choices=list_genes, server=TRUE, selected='NR4A3', options=NULL)
   updateSelectizeInput(session, 'genename', choices=list_genes, server=TRUE, selected='NR4A3', options=NULL)
   updateSelectizeInput(session, 'genename_timeline', choices=list_genes, server=TRUE, selected='NR4A3' , options=NULL)
-  updateSelectizeInput(session, 'genename_correlation', choices=list_genes, server=TRUE, selected='NR4A3' , options=NULL)
+  updateSelectizeInput(session, 'genename_correlation', choices=list_genes, server=TRUE, selected=NULL , options=NULL)
   
   #update all genes based on selection on home page
   observe({ updateTextInput(session, "genename", value=paste(input$genename_home)) })
@@ -132,6 +132,7 @@ server <- function(input, output, session) {
   # Acute Aerobic forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   AA_data <- reactive({
+    tryCatch({  
       #Select gene
       selectedata <- AA_stats[[input$genename]]
       #load module for selection of population of interest
@@ -149,6 +150,7 @@ server <- function(input, output, session) {
                                    GEO %in% input$AA_studies)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   })
   
   output$AA_plot <- renderPlot({ 
@@ -169,7 +171,8 @@ server <- function(input, output, session) {
   # Acute Resistance forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   AR_data <- reactive({
-      #Select gene
+    tryCatch({  
+    #Select gene
       selectedata <- AR_stats[[input$genename]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
@@ -186,6 +189,7 @@ server <- function(input, output, session) {
                                    GEO %in% input$AR_studies)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   })
   
   output$AR_plot <- renderPlot({
@@ -203,6 +207,7 @@ server <- function(input, output, session) {
   # Acute HIT forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   AH_data <- reactive({
+    tryCatch({  
       #Select gene
       selectedata <- AH_stats[[input$genename]]
       #load module for selection of population of interest
@@ -220,6 +225,7 @@ server <- function(input, output, session) {
                                    GEO %in% input$AH_studies)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   })
   
   output$AH_plot <- renderPlot({ 
@@ -237,6 +243,7 @@ server <- function(input, output, session) {
   # Training Aerobic forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TA_data <- reactive({
+    tryCatch({  
       #Select gene
       selectedata <- TA_stats[[input$genename]]
       #load module for selection of population of interest
@@ -254,6 +261,7 @@ server <- function(input, output, session) {
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   }) 
   
   output$TA_plot <- renderPlot({ 
@@ -271,6 +279,7 @@ server <- function(input, output, session) {
   # Training Resistance forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TR_data <- reactive({
+    tryCatch({  
       #Select gene
       selectedata <- TR_stats[[input$genename]]
       #load module for selection of population of interest
@@ -288,6 +297,7 @@ server <- function(input, output, session) {
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   })
   
   output$TR_plot <- renderPlot({ 
@@ -305,6 +315,7 @@ server <- function(input, output, session) {
   # Training Combined forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TC_data <- reactive({
+    tryCatch({  
       #Select gene
       selectedata <- TC_stats[[input$genename]]
       #load module for selection of population of interest
@@ -322,6 +333,7 @@ server <- function(input, output, session) {
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   })
   
   output$TC_plot <- renderPlot({ 
@@ -339,6 +351,7 @@ server <- function(input, output, session) {
   # Training HIT forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TH_data <- reactive({
+    tryCatch({  
       #Select gene
       selectedata <- TH_stats[[input$genename]]
       #load module for selection of population of interest
@@ -356,6 +369,7 @@ server <- function(input, output, session) {
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   })
   
   output$TH_plot <- renderPlot({ 
@@ -373,6 +387,7 @@ server <- function(input, output, session) {
   # Inactivity forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   IN_data <- reactive({
+    tryCatch({  
       #Select gene
       selectedata <- IN_stats[[input$genename]]
       #load module for selection of population of interest
@@ -390,6 +405,7 @@ server <- function(input, output, session) {
                                    Duration %in% input$inactivity_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
+    }, error=function(e) NULL)
   })
   
   output$IN_plot <- renderPlot({ 

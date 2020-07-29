@@ -1,10 +1,10 @@
 source("annexes/functions.R")
-source("tabs/tabHome.R")
-source("tabs/tabMetaanalysis.R")
-source("tabs/tabTimeline.R")
-source("tabs/tabCorrelations.R")
-source("tabs/tabDatasets.R")
-source("tabs/tabAcknowledgments.R")
+source("tabs/tab_home.R")
+source("tabs/tab_metaanalysis.R")
+source("tabs/tab_timeline.R")
+source("tabs/tab_correlations.R")
+source("tabs/tab_datasets.R")
+source("tabs/tab_acknowledgments.R")
 
 
 fluidPage(title="MetaMEx",
@@ -12,7 +12,7 @@ fluidPage(title="MetaMEx",
           style="padding:0 0 0 0",
           div(style="position:absolute;height:100%;width:100%;text-align:center;padding:3% 0 7% 0;background-color:#5B768E", id = "loading_page",
               h1(style="color:white;font-weight:bold", "MetaMEx"),
-              h3(style="color:white", "Meta-analysis of skeletal Muscle response to Exercise"),
+              h4(style="color:white", "Meta-analysis of Skeletal Muscle Response to Exercise"),
               div(style="align:center;bottom:0;padding:2% 0 20% 0;background-color:#5B768E",
                   tags$img(src='dna.gif', width="20%"),
                   h5(style="color:white", "Loading, please wait...")
@@ -71,7 +71,7 @@ fluidPage(title="MetaMEx",
                            tabMetaanalysis,         
                            
                            ########################################################################################        
-                           tabTimeline,
+                           #tabTimeline,
                            
                            ########################################################################################        
                            tabCorrelations,

@@ -26,6 +26,7 @@ list_genes      <- readRDS("data/annotation/names_genes.Rds")
 # Function to make meta-analysis table
 #===========================================================================================
 MetaAnalysis <- function(x){
+  validate(need(!is.null(x),   "No studies found - try different selection criteria"))
   #Order by logFC
   x <- x[order(x$logFC, decreasing=T),]
   #if only one row, skip calculation
