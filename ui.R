@@ -52,8 +52,8 @@ fluidPage(title="MetaMEx",
                                             tags$style(HTML(".shiny-notification { height: 50px;
                                                                            width: 800px;
                                                                            position:fixed;
-                                                                           top: calc(50% - 50px);;
-                                                                           left: calc(50% - 400px);;}")),
+                                                                           top: calc(50% - 50px);
+                                                                           left: calc(50% - 400px);}")),
                                             tags$style(HTML(".checkbox { font-size: 90%;}",
                                             )),
                                             tags$style(HTML(".checkbox-inline { margin-left: 0px;
