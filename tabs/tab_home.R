@@ -21,7 +21,7 @@ tabHome <- tabPanel("Home",
                                                    'jumpToAppTraining', 'Exercise Training', width="160px"),
                                       HTML('&nbsp;'), HTML('&nbsp;'),
                                       actionButton(class="btn btn-primary",
-                                                   'jumpToAppInactivity', 'Inactivity', width="160px"),
+                                                   'jumpToAppInactivity', 'Inactivity', width="160px")
                              ),
                              tags$br(),
 

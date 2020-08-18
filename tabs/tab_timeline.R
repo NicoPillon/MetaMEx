@@ -5,7 +5,7 @@ tabTimeline <- tabPanel("Timeline", value="panelTimeline",
                                  h5(style="color:white","Use the timeline to observe the expression of
                                         your gene of interest over time. This analysis is only available for healthy individuals
                                         and pools data from all available studies."
-                                 ),
+                                 )
                         ),
                         
                         # Row App and plots ###################################################################################
@@ -14,7 +14,7 @@ tabTimeline <- tabPanel("Timeline", value="panelTimeline",
                                         style="padding:12px 10px 0px 1%;background-color: #5b768e",
                                         selectizeInput("genename_timeline", label=NULL, 
                                                        choices=NULL,
-                                                       options=NULL),
+                                                       options=NULL)
                                  ),
                                  column(10,
                                         style="padding:0 0 0 0;background-color: #5b768e",

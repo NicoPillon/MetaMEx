@@ -13,7 +13,7 @@ tabCorrelations <- tabPanel("Correlations", value="panelCorr",
                                             style="padding:12px 10px 0px 1%;background-color: #5b768e",
                                             selectizeInput("genename_correlation", label=NULL, 
                                                            choices=NULL,
-                                                           options=NULL),
+                                                           options=NULL)
                                      ),
                                      column(10,
                                             style="padding:12px 10px 0px 0;background-color: #5b768e",
