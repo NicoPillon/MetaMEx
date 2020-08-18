@@ -4,7 +4,7 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                             fluidRow(style="background-color: #5b768e;margin:-18px -15px 0px -15px;padding:0.5% 1.5% 0% 1.3%",
                                      h5(style="color:white","Use the meta-analysis to obtain a forest plot of the expression of 
                                         your gene of interest in all available studies."
-                                     ),
+                                     )
                             ),
                             
                             # Row App and plots ###################################################################################
@@ -13,7 +13,7 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                                             style="padding:12px 10px 0 1%;background-color: #5b768e",
                                             selectizeInput("genename", label=NULL, 
                                                            choices=NULL, 
-                                                           selected=NULL, options=NULL),
+                                                           selected=NULL, options=NULL)
                                      ),
                                      column(10,
                                             style="padding:0 0 0 0;background-color: #5b768e",
@@ -56,7 +56,7 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                                                                                  checkboxGroupInput("acute_biopsy", tags$b("Biopsy collection"), 
                                                                                                     choices=list_categories[['acute_biopsy_choice']],
                                                                                                     selected=list_categories[['acute_biopsy_choice']][1:6]), 
-                                                                                 checkboxInput('acute_biopsy_allnone', 'All/None', value=T),
+                                                                                 checkboxInput('acute_biopsy_allnone', 'All/None', value=T)
                                                                           ),
                                                                  ),
                                                         ),
@@ -106,7 +106,7 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                                                                                  checkboxGroupInput("training_biopsy", tags$b("Biopsy time"),
                                                                                                     choices=list_categories[['training_biopsy_choice']],
                                                                                                     selected=list_categories[['training_biopsy_choice']]), 
-                                                                                 checkboxInput('training_biopsy_allnone', 'All/None', value=T),
+                                                                                 checkboxInput('training_biopsy_allnone', 'All/None', value=T)
                                                                           )
                                                                  )
                                                         ),
@@ -119,8 +119,7 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                                                                                  hr(), 
                                                                                  checkboxGroupInput("IN_studies", tags$b("Include/exclude specific datasets"), 
                                                                                                     selected=list_datasets[['IN_names']], list_datasets[['IN_names']],
-                                                                                                    inline = TRUE),
-                                                                                 
+                                                                                                    inline = TRUE)
                                                                           ),
                                                                           column(2, style="background-color:#eaf1f7;margin-top:60px;padding:0 1% 1% 2%",
                                                                                  h3("Filter by", style="color:#011b2a"),
@@ -133,12 +132,12 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                                                                                                     choices=list_categories[['inactivity_duration_choice']],
                                                                                                     selected=list_categories[['inactivity_duration_choice']]),
                                                                                  checkboxInput('inactivity_duration_allnone', 'All/None', value=T)
-                                                                          ),
+                                                                          )
                                                                  )
                                                         )
-                                            ),
+                                            )
                                             
-                                     ),
+                                     )
                             ),
                             
                             # Row Select Population ###################################################################################
@@ -175,6 +174,6 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                                                                   choices=list_categories[['disease_choice']],
                                                                   selected=c("HLY", "IGT")), #checkbox to select category
                                             checkboxInput('disease_allnone', 'All/None', value=T)
-                                     ),
+                                     )
                             )
 )
