@@ -175,6 +175,6 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                                                                   choices=list_categories[['disease_choice']],
                                                                   selected=c("HLY", "IGT")), #checkbox to select category
                                             checkboxInput('disease_allnone', 'All/None', value=T)
-                                     ),
+                                     )
                             )
 )
