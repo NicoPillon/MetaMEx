@@ -52,19 +52,15 @@ server <- function(input, output, session) {
   # Synchronize genenames according to home page
   #=======================================================================================
   updateSelectizeInput(session, 'genename_home', choices=list_genes, server=TRUE, selected='NR4A3', options=NULL)
-  updateSelectizeInput(session, 'genename', choices=list_genes, server=TRUE, selected='NR4A3', options=NULL)
-  updateSelectizeInput(session, 'genename_timeline', choices=list_genes, server=TRUE, selected='NR4A3' , options=NULL)
-  updateSelectizeInput(session, 'genename_correlation', choices=list_genes, server=TRUE, selected=NULL , options=NULL)
+  observeEvent(input$genename_home, { updateSelectizeInput(session, 'genename_metaanalysis', choices=list_genes, server=TRUE, selected=input$genename_home, options=NULL) })
+  observeEvent(input$genename_home, { updateSelectizeInput(session, 'genename_timeline', choices=list_genes, server=TRUE, selected=input$genename_home , options=NULL) })
+  observeEvent(input$genename_home, { updateSelectizeInput(session, 'genename_correlation', choices=list_genes, server=TRUE, selected=input$genename_home , options=NULL) })
   
-  #update all genes based on selection on home page
-  observe({ updateTextInput(session, "genename", value=paste(input$genename_home)) })
-  observe({ updateTextInput(session, "genename_timeline", value=paste(input$genename_home)) })
-  observe({ updateTextInput(session, "genename_correlation", value=paste(input$genename_home)) })
+  #update all if gene is changed on the meta-analysis tab
+  observeEvent(input$genename_metaanalysis, { updateSelectizeInput(session, "genename_timeline", selected=input$genename_metaanalysis) })
+  observeEvent(input$genename_metaanalysis, { updateSelectizeInput(session, 'genename_correlation', selected=input$genename_metaanalysis) })
   
-  #update timeline and correlation genes based on selection on meta-analysis
-  observe({ updateTextInput(session, "genename_timeline", value=paste(input$genename)) })
-  observe({ updateTextInput(session, "genename_correlation", value=paste(input$genename)) })
-  
+
   #=======================================================================================
   # Observe the clicks on buttons on home page and transfer to tab
   #=======================================================================================
@@ -134,7 +130,7 @@ server <- function(input, output, session) {
   AA_data <- reactive({
     tryCatch({  
       #Select gene
-      selectedata <- AA_stats[[input$genename]]
+      selectedata <- AA_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -159,7 +155,7 @@ server <- function(input, output, session) {
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
     #call module to make forest plot
-    finalplot <- ModuleForestPlot(AA_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(AA_data(), paste(input$genename_metaanalysis),
                                   "#9D6807", 
                                   "acute aerobic exercise studies")
     #display forest plot
@@ -173,7 +169,7 @@ server <- function(input, output, session) {
   AR_data <- reactive({
     tryCatch({  
     #Select gene
-      selectedata <- AR_stats[[input$genename]]
+      selectedata <- AR_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -196,7 +192,7 @@ server <- function(input, output, session) {
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
-    finalplot <- ModuleForestPlot(AR_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(AR_data(), paste(input$genename_metaanalysis),
                                   "#4C5C33", 
                                   "acute resistance exercise studies")
     finalplot
@@ -209,7 +205,7 @@ server <- function(input, output, session) {
   AH_data <- reactive({
     tryCatch({  
       #Select gene
-      selectedata <- AH_stats[[input$genename]]
+      selectedata <- AH_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -232,7 +228,7 @@ server <- function(input, output, session) {
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
-    finalplot <- ModuleForestPlot(AH_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(AH_data(), paste(input$genename_metaanalysis),
                                   "#60394E", 
                                   "acute HIT exercise studies")
     finalplot
@@ -245,7 +241,7 @@ server <- function(input, output, session) {
   TA_data <- reactive({
     tryCatch({  
       #Select gene
-      selectedata <- TA_stats[[input$genename]]
+      selectedata <- TA_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -268,7 +264,7 @@ server <- function(input, output, session) {
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
-    finalplot <- ModuleForestPlot(TA_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(TA_data(), paste(input$genename_metaanalysis),
                                   "#9D6807", 
                                   "aerobic training studies")
     finalplot
@@ -281,7 +277,7 @@ server <- function(input, output, session) {
   TR_data <- reactive({
     tryCatch({  
       #Select gene
-      selectedata <- TR_stats[[input$genename]]
+      selectedata <- TR_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -304,7 +300,7 @@ server <- function(input, output, session) {
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
-    finalplot <- ModuleForestPlot(TR_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(TR_data(), paste(input$genename_metaanalysis),
                                   "#4C5C33", 
                                   "resistance training studies")
     finalplot
@@ -317,7 +313,7 @@ server <- function(input, output, session) {
   TC_data <- reactive({
     tryCatch({  
       #Select gene
-      selectedata <- TC_stats[[input$genename]]
+      selectedata <- TC_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -340,7 +336,7 @@ server <- function(input, output, session) {
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
-    finalplot <- ModuleForestPlot(TC_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(TC_data(), paste(input$genename_metaanalysis),
                                   "#58585A", 
                                   "combined training studies")
     finalplot
@@ -353,7 +349,7 @@ server <- function(input, output, session) {
   TH_data <- reactive({
     tryCatch({  
       #Select gene
-      selectedata <- TH_stats[[input$genename]]
+      selectedata <- TH_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -376,7 +372,7 @@ server <- function(input, output, session) {
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
-    finalplot <- ModuleForestPlot(TH_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(TH_data(), paste(input$genename_metaanalysis),
                                   "#60394E", 
                                   "HIT training studies")
     finalplot
@@ -389,7 +385,7 @@ server <- function(input, output, session) {
   IN_data <- reactive({
     tryCatch({  
       #Select gene
-      selectedata <- IN_stats[[input$genename]]
+      selectedata <- IN_stats[[input$genename_metaanalysis]]
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -412,7 +408,7 @@ server <- function(input, output, session) {
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
-    finalplot <- ModuleForestPlot(IN_data(), paste(input$genename),
+    finalplot <- ModuleForestPlot(IN_data(), paste(input$genename_metaanalysis),
                                   "#3E3328", 
                                   "inactivity studies")
     finalplot
@@ -526,7 +522,9 @@ server <- function(input, output, session) {
   #=======================================================================================
   
   Corr_stats <- reactive({
-    tryCatch({
+    validate(need(isTRUE(input$genename_correlation %in% correlations_genes),
+                  "No correlation data for this gene"))
+        tryCatch({
       withProgress(message = 'Calculating', value = 0, max=9, {
         selectedata <- correlations_data
         geneofinterest <- as.numeric(selectedata[toupper(input$genename_correlation),])
