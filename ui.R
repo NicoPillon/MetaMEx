@@ -60,8 +60,7 @@ fluidPage(title="MetaMEx",
                                             tags$style(HTML(".checkbox-inline { margin-left: 0px;
                                                                         margin-right: 10px;  }
                                                      .checkbox-inline+.checkbox-inline { margin-left: 0px;
-                                                                                         margin-right: 10px; } ")
-                                            )
+                                                                                         margin-right: 10px; } "))
                            ),
 
                            ########################################################################################        

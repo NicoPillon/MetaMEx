@@ -11,7 +11,7 @@ tabMetaanalysis <- tabPanel("Meta-analysis", value="panelApp",
                             fluidRow(style="margin:0px -15px 0px -15px;",
                                      column(2,
                                             style="padding:12px 10px 0 1%;background-color: #5b768e",
-                                            selectizeInput("genename", label=NULL, 
+                                            selectizeInput("genename_metaanalysis", label=NULL, 
                                                            choices=NULL, 
                                                            selected=NULL, options=NULL)
                                      ),
