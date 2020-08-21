@@ -13,6 +13,7 @@ library(stringr)
 library(scales)
 library(rvest)
 library(rmarkdown)
+library(feather)
 
 #===========================================================================================
 # Lists of the different studies, categories and gene names
@@ -121,3 +122,37 @@ createLink <- function(val) {
   sprintf(paste0('<a href="', URLdecode(val),'" target="_blank">', 
                  gsub("(.*org/)|(.*=)", "", val) ,'</a>'))
   }
+
+
+#===========================================================================================
+# Function to make dataframe from gene name
+#===========================================================================================
+DataForGeneName <- function(x){
+  colnames(x) <- gsub("AcAe_", "", colnames(x))
+  colnames(x) <- gsub("AcRe_", "", colnames(x))
+  colnames(x) <- gsub("AcHi_", "", colnames(x))
+  colnames(x) <- gsub("TrAe_", "", colnames(x))
+  colnames(x) <- gsub("TrCo_", "", colnames(x))
+  colnames(x) <- gsub("TrHi_", "", colnames(x))
+  colnames(x) <- gsub("TrRe_", "", colnames(x))
+  colnames(x) <- gsub("Inac_", "", colnames(x))
+  x <- data.frame(t(x[grepl('logFC',    colnames(x))]), # M-value (M) is the log2-fold change
+                  t(x[grepl('adj.P.Val',colnames(x))]), # Benjamini and Hochberg's method to control the false discovery rate
+                  t(x[grepl('CI.L',     colnames(x))]), # lower limit of the 95% confidence interval
+                  t(x[grepl('CI.R',     colnames(x))]), # upper limit of the 95% confidence interval
+                  t(x[grepl('mean.pre', colnames(x))]), # mean of control condition
+                  t(x[grepl('mean.post', colnames(x))]), # mean of exercise condition
+                  t(x[grepl('Sd.pre',   colnames(x))]), # standard deviation of control condition
+                  t(x[grepl('Sd.post',   colnames(x))]), # standard deviation of exercise condition
+                  t(x[grepl('size',     colnames(x))])) # number of subjects in the study
+  x <- cbind(x, str_split_fixed(rownames(x), "_", 11))
+  colnames(x) <- c('logFC', 'adj.P.Val', 
+                   'CI.L', 'CI.R',
+                   'Mean_Ctrl', 'Mean_Ex', 
+                   'Sd_Ctrl', 'Sd_Ex', 'size',
+                   'Studies', 'GEO', 'Exercisetype', 
+                   'Muscle', 'Sex', 'Age', 'Training',
+                   'Obesity', 'Disease', 'Biopsy', 'Duration')
+  x$Studies <- gsub("logFC_","", rownames(x))
+  x
+}

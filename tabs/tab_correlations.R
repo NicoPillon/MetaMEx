@@ -26,7 +26,7 @@ tabCorrelations <- tabPanel("Correlations", value="panelCorr",
                                                                        "Training"=10,
                                                                        "Obesity"=11,
                                                                        "Disease"=12),
-                                                        selected = "All"),
+                                                        selected = 5),
                                             #=======================================================================================================================
                                             fluidRow(style="background-color: white;padding:1% 0 5% 0",
                                                      column(5, DT::dataTableOutput("CorrTable")
