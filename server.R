@@ -8,29 +8,29 @@ server <- function(input, output, session) {
   withProgress(message = 'Loading data', value = 1, max=10, {
     # Data for forest plots
     incProgress(1, detail="Acute aerobic exercise studies")
-    AA_stats <- readRDS("data/merged_stats/acute_aerobic.Rds")
+    AA_stats <- data.frame(read_feather("data/merged_stats/acute_aerobic.feather"), row.names=1)
     incProgress(1, detail="Acute HIT exercise studies")
-    AH_stats <- readRDS("data/merged_stats/acute_hit.Rds")
+    AH_stats <- data.frame(read_feather("data/merged_stats/acute_hit.feather"), row.names=1)
     incProgress(1, detail="Acute resistance exercise studies")
-    AR_stats <- readRDS("data/merged_stats/acute_resistance.Rds")
+    AR_stats <- data.frame(read_feather("data/merged_stats/acute_resistance.feather"), row.names=1)
     incProgress(1, detail="Aerobic training studies")
-    TA_stats <- readRDS("data/merged_stats/training_aerobic.Rds")
+    TA_stats <- data.frame(read_feather("data/merged_stats/training_aerobic.feather"), row.names=1)
     incProgress(1, detail="Resistance training studies")
-    TR_stats <- readRDS("data/merged_stats/training_resistance.Rds")
+    TR_stats <- data.frame(read_feather("data/merged_stats/training_resistance.feather"), row.names=1)
     incProgress(1, detail="Combined training studies")
-    TC_stats <- readRDS("data/merged_stats/training_combined.Rds")
+    TC_stats <- data.frame(read_feather("data/merged_stats/training_combined.feather"), row.names=1)
     incProgress(1, detail="HIT training studies")
-    TH_stats <- readRDS("data/merged_stats/training_hit.Rds")
+    TH_stats <- data.frame(read_feather("data/merged_stats/training_hit.feather"), row.names=1)
     incProgress(1, detail="Inactivity studies")
-    IN_stats <- readRDS("data/merged_stats/inactivity.Rds")
+    IN_stats <- data.frame(read_feather("data/merged_stats/inactivity.feather"), row.names=1)
     
     # Data for timeline
     incProgress(1, detail="Timeline analysis")
-    timeline_acute_data <- readRDS("data/timeline/timeline_acute_data.Rds")
-    timeline_acute_stats <- readRDS("data/timeline/timeline_acute_stats.Rds")
+    timeline_acute_data <- data.frame(read_feather("data/timeline/timeline_acute_data.feather"), row.names=1)
+    timeline_acute_stats <- data.frame(read_feather("data/timeline/timeline_acute_stats.feather"), row.names=1)
     
-    timeline_inactivity_data <- readRDS("data/timeline/timeline_inactivity_data.Rds")
-    timeline_inactivity_stats <- readRDS("data/timeline/timeline_inactivity_stats.Rds")
+    timeline_inactivity_data <- data.frame(read_feather("data/timeline/timeline_inactivity_data.feather"), row.names=1)
+    timeline_inactivity_stats <- data.frame(read_feather("data/timeline/timeline_inactivity_stats.feather"), row.names=1)
     
     timeline_genes <- unique(na.omit(c(rownames(timeline_acute_data), 
                                rownames(timeline_inactivity_data))))
@@ -129,8 +129,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   AA_data <- reactive({
     tryCatch({  
-      #Select gene
-      selectedata <- AA_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- AA_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -168,8 +169,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   AR_data <- reactive({
     tryCatch({  
-    #Select gene
-      selectedata <- AR_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- AR_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -204,8 +206,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   AH_data <- reactive({
     tryCatch({  
-      #Select gene
-      selectedata <- AH_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- AH_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -240,8 +243,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TA_data <- reactive({
     tryCatch({  
-      #Select gene
-      selectedata <- TA_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- TA_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -276,8 +280,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TR_data <- reactive({
     tryCatch({  
-      #Select gene
-      selectedata <- TR_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- TR_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -312,8 +317,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TC_data <- reactive({
     tryCatch({  
-      #Select gene
-      selectedata <- TC_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- TC_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -348,8 +354,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   TH_data <- reactive({
     tryCatch({  
-      #Select gene
-      selectedata <- TH_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- TH_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -384,8 +391,9 @@ server <- function(input, output, session) {
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   IN_data <- reactive({
     tryCatch({  
-      #Select gene
-      selectedata <- IN_stats[[input$genename_metaanalysis]]
+      #select genes With feather
+      selectedata <- IN_stats[input$genename_metaanalysis,]
+      selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest
       selectedata <- dplyr::filter(selectedata,
                                    Muscle %in% input$muscle, 
@@ -398,7 +406,7 @@ server <- function(input, output, session) {
       selectedata <- dplyr::filter(selectedata,
                                    GEO %in% input$IN_studies,
                                    Exercisetype %in% input$inactivity_protocol,
-                                   Duration %in% input$inactivity_duration)
+                                   Biopsy %in% input$inactivity_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata)
     }, error=function(e) NULL)
