@@ -634,13 +634,17 @@ server <- function(input, output, session) {
     colnames(data) <- c("Gene1", "Gene2", "logFC", "GEO",
                         "Protocol", "Exercise type", "Muscle", 
                         "Sex", "Age", "Training", "Obesity", "Disease", "Biopsy time", "Training duration")
-    active <- ggplot(data, aes(x=Gene2, y=Gene1, color=data[,as.numeric(input$selectgroup)])) +
-      geom_smooth(method=lm, se=F, fullrange=TRUE) +
-      geom_point(shape=19) +
+    active <- ggplot(data, aes(x=Gene2, y=Gene1, 
+                               color=data[,as.numeric(input$selectgroup)],
+                               shape=data[,as.numeric(input$selectgroup)])) +
+      geom_smooth(method=lm, se=F, fullrange=TRUE, size=0.75) +
+      geom_point(size=3) +
       labs(x=paste(rownames(Gene2), ", log2(fold-change)", sep=""),
            y=paste(input$genename_correlation, ", log2(fold-change)", sep=""),
            title="") +
-      theme_bw() + theme + theme(legend.position="right")
+      theme_bw() + theme + theme(legend.position="right") +
+      scale_shape_manual(values=c(15,16,17,15,16,17,15,16,17)) +
+      scale_color_manual(values=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999"))
     return(active) 
   })
   
