@@ -146,7 +146,7 @@ server <- function(input, output, session) {
       selectedata <- dplyr::filter(selectedata,
                                    GEO %in% input$AA_studies)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(AA_stats))
     }, error=function(e) NULL)
   })
   
@@ -186,7 +186,7 @@ server <- function(input, output, session) {
       selectedata <- dplyr::filter(selectedata,
                                    GEO %in% input$AR_studies)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(AR_stats))
     }, error=function(e) NULL)
   })
   
@@ -223,7 +223,7 @@ server <- function(input, output, session) {
       selectedata <- dplyr::filter(selectedata,
                                    GEO %in% input$AH_studies)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(AH_stats))
     }, error=function(e) NULL)
   })
   
@@ -260,7 +260,7 @@ server <- function(input, output, session) {
                                    Biopsy %in% input$training_biopsy,
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(TA_stats))
     }, error=function(e) NULL)
   }) 
   
@@ -297,7 +297,7 @@ server <- function(input, output, session) {
                                    Biopsy %in% input$training_biopsy,
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(TR_stats))
     }, error=function(e) NULL)
   })
   
@@ -334,7 +334,7 @@ server <- function(input, output, session) {
                                    Biopsy %in% input$training_biopsy,
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(TC_stats))
     }, error=function(e) NULL)
   })
   
@@ -371,7 +371,7 @@ server <- function(input, output, session) {
                                    Biopsy %in% input$training_biopsy,
                                    Duration %in% input$training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(TH_stats))
     }, error=function(e) NULL)
   })
   
@@ -408,7 +408,7 @@ server <- function(input, output, session) {
                                    Exercisetype %in% input$inactivity_protocol,
                                    Biopsy %in% input$inactivity_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
-      metadata <- MetaAnalysis(selectedata)
+      metadata <- MetaAnalysis(selectedata, nrow(IN_stats))
     }, error=function(e) NULL)
   })
   

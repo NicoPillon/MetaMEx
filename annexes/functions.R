@@ -26,7 +26,7 @@ list_genes      <- readRDS("data/annotation/names_genes.Rds")
 #===========================================================================================
 # Function to make meta-analysis table
 #===========================================================================================
-MetaAnalysis <- function(x){
+MetaAnalysis <- function(x, nrow){
   validate(need(!is.null(x),   "No studies found - try different selection criteria"))
   #Order by logFC
   x <- x[order(x$logFC, decreasing=T),]
@@ -48,7 +48,7 @@ MetaAnalysis <- function(x){
                 data = x,
                 control=list(maxiter=1000, stepadj=0.5),
                 weighted=T, weights=x$size)
-    fdr  <- p.adjust(meta$pval, method='BH')
+    fdr  <- p.adjust(meta$pval, method='bonferroni', n=nrow)
     x <- rbind(x[,1:10],
                c(meta$beta, fdr, meta$ci.lb, meta$ci.ub, rep(NA, 4), sum(x$size, na.rm=T)))
     x$Studies <- c(gsub("logFC_", "", x$Studies[1:(nrow(x)-1)]),
