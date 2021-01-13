@@ -91,7 +91,7 @@ The timeline was calculated by collecting all data available in the database and
   </div>
 
 
-####  <a id="displayText" href="javascript:toggle(2);">Why is FDR different from what is reported in the original publications?</a>
+####  <a id="displayText" href="javascript:toggle(2);">Why are statistics on the website different from what is reported in the original publications?</a>
   <div class="div_help" id="toggleText2" style="display: none">
 
 Whenever possible, we downloaded the raw data and re-processed studies using the same pipeline. That means that the normalization methods that we used might differ from the ones used by the original authors. In addition, samples were often insufficiently annotated to allow us to run paired statistics comparing pre/post interventions. We therefore had to used unpaired statistics and lost power in the process. Finally, many studies pooled individuals of different age and BMI to have higher sample size. To allow proper comparison in the meta-analysis, we split these studies into sub groups and analysed them separately, therefore reducing the sample size and statistical power.
@@ -99,12 +99,17 @@ Whenever possible, we downloaded the raw data and re-processed studies using the
   </div>
   
 
- 
+####  <a id="displayText" href="javascript:toggle(9);">What is the version history of the database?</a>
+  <div class="div_help" id="toggleText9" style="display: none">
+
+* MetaMEx 2.1 - Jan 21, 2021. Addition of recently published studies. Change to Bonferroni correction for multiple testing adjustment of the meta-analysis p-values. 
+* MetaMEx 2.0 - Aug 21, 2020. Major update of the database and style of the app. Addition of the most recent published datasets. Adjustment of colors and style for accessibility. 
+* MetaMEx 1.3 - Dec 19, 2019. Added published HIIT studies.
+* MetaMEx 1.2 - Feb 12, 2019. Updated clinical characteristics of studies with obesity status.
+* MetaMEx 1.1 - Sep 20, 2018. Added feature for correlations, improved speed and added progress bars.
+* MetaMEx 1.0 - Initial release on May 22, 2018.
+
+  </div>
   
-
-
-  
-
-
 
 
