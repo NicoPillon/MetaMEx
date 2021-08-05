@@ -37,7 +37,7 @@ tabMetaanalysis_mouse <- tabPanel("Mouse", value="panelAppMouse",
                                                                                                           selected=names_mouse_categories[['exercise_type_choice']]),
                                                                                        checkboxInput('mouse_exercise_type_allnone', 'All/None', value=T), 
                                                                                        tags$br(),
-                                                                                       checkboxGroupInput("mouse_acute_biopsy", tags$b("Biopsy collection"), 
+                                                                                       checkboxGroupInput("mouse_acute_biopsy", tags$b("Time after exercise"), 
                                                                                                           choices=names_mouse_categories[['acute_biopsy_choice']],
                                                                                                           selected=names_mouse_categories[['acute_biopsy_choice']][1:6]), 
                                                                                        checkboxInput('mouse_acute_biopsy_allnone', 'All/None', value=T)

@@ -26,6 +26,8 @@ names_mouse_categories <- readRDS("data/annotation/names_mouse_categories.Rds")
 names_mouse_datasets   <- readRDS("data/annotation/names_mouse_datasets.Rds")
 names_mouse_genes      <- readRDS("data/annotation/names_mouse_genes.Rds")
 
+correlations_categories_human <- readRDS("data/correlations/corr_human_categories.Rds")
+correlations_annotation_human <- readRDS("data/correlations/corr_human_entrezid.Rds")
 
 #===========================================================================================
 # Function to make dataframe from gene name

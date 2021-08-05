@@ -68,7 +68,7 @@ tabMetaanalysis_human <- tabPanel("Human", value="panelApp",
                                                                                                           selected=names_human_categories[['exercise_type_choice']]),
                                                                                        checkboxInput('human_exercise_type_allnone', 'All/None', value=T), 
                                                                                        tags$br(),
-                                                                                       checkboxGroupInput("human_acute_biopsy", tags$b("Biopsy collection"), 
+                                                                                       checkboxGroupInput("human_acute_biopsy", tags$b("Time after exercise"), 
                                                                                                           choices=names_human_categories[['acute_biopsy_choice']],
                                                                                                           selected=names_human_categories[['acute_biopsy_choice']][1:6]), 
                                                                                        checkboxInput('human_acute_biopsy_allnone', 'All/None', value=T)
@@ -159,61 +159,87 @@ tabMetaanalysis_human <- tabPanel("Human", value="panelApp",
                                                                                                    )
                                                                                        )
                                                                                 ),
-                                                                                       column(2, style="background-color:#eaf1f7;margin-top:60px;padding:0 1% 1% 2%",
-                                                                                              h3("Filter by", style="color:#011b2a"),
-                                                                                              checkboxGroupInput("human_inactivity_protocol", 
-                                                                                                                 tags$b("Protocol"), 
-                                                                                                                 choices=names_human_categories[['inactivity_protocol_choice']],
-                                                                                                                 selected=names_human_categories[['inactivity_protocol_choice']]),
-                                                                                              checkboxInput('human_inactivity_protocol_allnone', 'All/None', value=T),
-                                                                                              tags$br(),
-                                                                                              checkboxGroupInput("human_inactivity_duration", 
-                                                                                                                 tags$b("Duration"), 
-                                                                                                                 choices=names_human_categories[['inactivity_duration_choice']],
-                                                                                                                 selected=names_human_categories[['inactivity_duration_choice']]),
-                                                                                              checkboxInput('human_inactivity_duration_allnone', 'All/None', value=T)
-                                                                                       )
+                                                                                column(2, style="background-color:#eaf1f7;margin-top:60px;padding:0 1% 1% 2%",
+                                                                                       h3("Filter by", style="color:#011b2a"),
+                                                                                       checkboxGroupInput("human_inactivity_protocol", 
+                                                                                                          tags$b("Protocol"), 
+                                                                                                          choices=names_human_categories[['inactivity_protocol_choice']],
+                                                                                                          selected=names_human_categories[['inactivity_protocol_choice']]),
+                                                                                       checkboxInput('human_inactivity_protocol_allnone', 'All/None', value=T),
+                                                                                       tags$br(),
+                                                                                       checkboxGroupInput("human_inactivity_duration", 
+                                                                                                          tags$b("Duration"), 
+                                                                                                          choices=names_human_categories[['inactivity_duration_choice']],
+                                                                                                          selected=names_human_categories[['inactivity_duration_choice']]),
+                                                                                       checkboxInput('human_inactivity_duration_allnone', 'All/None', value=T)
+                                                                                )
+                                                                       )
+                                                              ),
+                                                              
+                                                              #= Tab correlations ===================================================== 
+                                                              tabPanel("Correlations", 
+                                                                       value="panelAppInactivity",
+                                                                       fluidRow(style="background-color: white", 
+                                                                                column(12, style="padding:2% 5% 2% 2%;margin:0",
+                                                                                checkboxGroupInput("human_corr_protocol", 
+                                                                                                   " ", 
+                                                                                                   choices=correlations_categories_human[['corr_protocol_choice']],
+                                                                                                   selected=correlations_categories_human[['corr_protocol_choice']],
+                                                                                                   inline = TRUE),
+                                                                                actionButton("updateCorrHuman", "Calculate", icon("refresh")),
+                                                                                tags$br(), tags$br()
+                                                                                )
+                                                                       ),
+                                                                       fluidRow(style="background-color: white",
+                                                                                column(5, style="padding:0% 5% 2% 2%;margin:0",
+                                                                                       DT::dataTableOutput("corr_table_human")
+                                                                                ),
+                                                                                
+                                                                                column(6, 
+                                                                                       plotOutput("corr_plot_human", height="300px"),
+                                                                                       textOutput("corr_description_human"),
+                                                                                       uiOutput ("corr_link_human")
                                                                                 )
                                                                        )
                                                               )
-                                                              
                                                   )
-                                           ),
-                                           
-                                           # Row Select Population ###################################################################################
-                                           tags$br(),
-                                           fluidRow(style="position:center;background-color:#f4eae7;padding:0 0 1% 2%;margin:0 6% 5% 17%",
-                                                    h3("Customize your human population of interest", style="color:#c93f1e"),
-                                                    column(1, checkboxGroupInput("human_sex", tags$b("Sex"), 
-                                                                                 choices=names_human_categories[['sex_choice']],
-                                                                                 selected=names_human_categories[['sex_choice']]), #checkbox to select category
-                                                           checkboxInput('human_sex_allnone', 'All/None', value=T)
-                                                    ), 
-                                                    column(1, checkboxGroupInput("human_age", tags$b("Age"),
-                                                                                 choices=names_human_categories[['age_choice']],
-                                                                                 selected=names_human_categories[['age_choice']]), #checkbox to select category
-                                                           checkboxInput('human_age_allnone', 'All/None', value=T)
-                                                    ), 
-                                                    column(1, checkboxGroupInput("human_fitness", tags$b("Fitness"),
-                                                                                 choices=names_human_categories[['training_choice']],
-                                                                                 selected=names_human_categories[['training_choice']]), #checkbox to select category
-                                                           checkboxInput('human_fitness_allnone', 'All/None', value=T)
-                                                    ), 
-                                                    column(2, checkboxGroupInput("human_weight", tags$b("Weight"), 
-                                                                                 choices=names_human_categories[['obesity_choice']],
-                                                                                 selected=names_human_categories[['obesity_choice']]), #checkbox to select category
-                                                           checkboxInput('human_weight_allnone', 'All/None', value=T)
-                                                    ), 
-                                                    column(2, checkboxGroupInput("human_muscle", tags$b("Muscle"), 
-                                                                                 choices=names_human_categories[['muscle_choice']],
-                                                                                 selected=names_human_categories[['muscle_choice']]),
-                                                           checkboxInput('human_muscle_allnone', 'All/None', value=T)
-                                                    ), 
-                                                    column(4, checkboxGroupInput("human_disease", tags$b("Health status"), 
-                                                                                 choices=names_human_categories[['disease_choice']],
-                                                                                 selected=names_human_categories[['disease_choice']]), #checkbox to select category
-                                                           checkboxInput('human_disease_allnone', 'All/None', value=T)
-                                                    )
+                                                  
+                                           )
+                                  ),
+                                  
+                                  # Row Select Population ###################################################################################
+                                  tags$br(),
+                                  fluidRow(style="position:center;background-color:#f4eae7;padding:0 0 1% 2%;margin:0 6% 5% 17%",
+                                           h3("Customize your human population of interest", style="color:#c93f1e"),
+                                           column(1, checkboxGroupInput("human_sex", tags$b("Sex"), 
+                                                                        choices=names_human_categories[['sex_choice']],
+                                                                        selected=names_human_categories[['sex_choice']]), #checkbox to select category
+                                                  checkboxInput('human_sex_allnone', 'All/None', value=T)
+                                           ), 
+                                           column(1, checkboxGroupInput("human_age", tags$b("Age"),
+                                                                        choices=names_human_categories[['age_choice']],
+                                                                        selected=names_human_categories[['age_choice']]), #checkbox to select category
+                                                  checkboxInput('human_age_allnone', 'All/None', value=T)
+                                           ), 
+                                           column(1, checkboxGroupInput("human_fitness", tags$b("Fitness"),
+                                                                        choices=names_human_categories[['training_choice']],
+                                                                        selected=names_human_categories[['training_choice']]), #checkbox to select category
+                                                  checkboxInput('human_fitness_allnone', 'All/None', value=T)
+                                           ), 
+                                           column(2, checkboxGroupInput("human_weight", tags$b("Weight"), 
+                                                                        choices=names_human_categories[['obesity_choice']],
+                                                                        selected=names_human_categories[['obesity_choice']]), #checkbox to select category
+                                                  checkboxInput('human_weight_allnone', 'All/None', value=T)
+                                           ), 
+                                           column(2, checkboxGroupInput("human_muscle", tags$b("Muscle"), 
+                                                                        choices=names_human_categories[['muscle_choice']],
+                                                                        selected=names_human_categories[['muscle_choice']]),
+                                                  checkboxInput('human_muscle_allnone', 'All/None', value=T)
+                                           ), 
+                                           column(4, checkboxGroupInput("human_disease", tags$b("Health status"), 
+                                                                        choices=names_human_categories[['disease_choice']],
+                                                                        selected=names_human_categories[['disease_choice']]), #checkbox to select category
+                                                  checkboxInput('human_disease_allnone', 'All/None', value=T)
                                            )
                                   )
-                                  
+)

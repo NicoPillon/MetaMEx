@@ -36,6 +36,8 @@ This work was supported by the Marie Sklodowska-Curie Actions (European Commissi
 ![](funding_bodies/Swedish_Research_Council_for_Sport_Science_Logo.png)
 ![](funding_bodies/SLL_Logo.png)
 ![](funding_bodies/EFSD_Logo.png)
+![](funding_bodies/SNIC_logo.png)
+
 
 ---
 

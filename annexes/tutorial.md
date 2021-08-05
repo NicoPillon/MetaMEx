@@ -83,7 +83,7 @@ The meta-analysis was created by collecting publicly available studies on mRNA e
 
 * Robust multiarray averaging was used for affymetrix arrays (oligo package)
 * Quantile normalization was used for other microarrays (limma package)
-* Variance stabilizing transformation (VST) was used for RNA sequencing datasets (DESeq2 package). 
+* RNA sequencing datasets were processed using the edgeR package following the standard pipeline (https://bioconductor.org/packages/devel/workflows/vignettes/RnaSeqGeneEdgeRQL/inst/doc/edgeRQL.html). 
 * Moderated t-statistics were calculated for each  study with empirical Bayes statistics for differential expression (limma package).
 
 The meta-analysis summary was calculated using restricted maximum likelihood (metafor package). The analysis was weighted using sample size (n) to adjust for studies with small number of volunteers. 

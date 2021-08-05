@@ -2,6 +2,7 @@
 # Define server logic ##############################################################################################
 server <- function(input, output, session) {
   
+  
   #=======================================================================================
   #
   # Load data
@@ -60,12 +61,10 @@ server <- function(input, output, session) {
     
     
     # Data for correlations
-    #incProgress(1, detail="Correlation tables")
-    #correlations_data <- readRDS("data/correlations/correlations_data.Rds")
-    #correlations_genes <- rownames(correlations_data)
-    #correlations_refseq <- readRDS("data/correlations/correlations_refseq.Rds")
-    
-    
+    incProgress(1, detail="Correlation tables")
+    correlations_data_human <- data.frame(read_feather("data/correlations/data_human_correlations.feather"), row.names=1)
+    correlations_data_mouse <- data.frame(read_feather("data/correlations/data_mouse_correlations.feather"), row.names=1)
+
   })
   
   
@@ -657,12 +656,13 @@ server <- function(input, output, session) {
   })
   
   output$table_human_timeline_acute <- renderTable(rownames = TRUE, align='c', { 
-    validate(need(input$genename_metaanalysis_human!="",  "No data found for this gene")) 
     res  <- timeline_acute_stats[input$genename_metaanalysis_human,]
     stats <- data.frame(logFC=signif(t(res[grepl('Median.[0-9]', colnames(res))]), 2),
                         p.value=t(res[grepl('P.Value', colnames(res))]),
                         adj.P.Val=t(res[grepl('adj.P.Val', colnames(res))]))
-    validate(need(!all(is.na(stats[,2])),  "No data found for this gene"))
+    
+    validate(need(!all(is.na(stats[,2])),  "This gene is undetectable in too many studies to calculate the timeline."))
+    
     colnames(stats) <- c('logFC', 'p.value', 'adj.P.Val')
     ANOVA <- c("", res[grepl('F_', colnames(res))])
     names(ANOVA) <- c('logFC', 'p.value', 'adj.P.Val')
@@ -725,7 +725,7 @@ server <- function(input, output, session) {
                         adj.P.Val=t(res[grepl('adj.P.Val', colnames(res))]))
     colnames(stats) <- c('logFC', 'p.value', 'adj.P.Val')
     
-    validate(need(!all(is.na(stats[,2])),  "No data found for this gene"))
+    validate(need(!all(is.na(stats[,2])),  "This gene is undetectable in too many studies to calculate the timeline."))
     
     ANOVA <- c("", res[grepl('F_', colnames(res))])
     names(ANOVA) <- c("logFC", 'p.value', 'adj.P.Val')
@@ -814,17 +814,56 @@ server <- function(input, output, session) {
       write.csv(stats_mouse_IN, file)
     })
   
-  #=======================================================================================
-  # Make correlation table
-  #=======================================================================================
   
-  Corr_stats <- reactive({
-    validate(need(isTRUE(input$genename_correlation %in% correlations_genes),
-                  "No correlation data for this gene"))
+  
+  #=======================================================================================
+  #
+  # Correlations - human
+  #
+  #=======================================================================================
+
+  #subset data for correlations
+  corr_data_human <- eventReactive(input$updateCorrHuman, {
+    validate(need(!is.null(input$human_corr_protocol),     "Impossible to calculate correlations. Adjust your selection criteria and re-calculate."))
+    
     tryCatch({
-      withProgress(message = 'Calculating', value = 0, max=9, {
-        selectedata <- correlations_data
-        geneofinterest <- as.numeric(selectedata[input$genename_correlation,])
+        studies <- data.frame(colnames(correlations_data_human), 
+                         str_split_fixed(colnames(correlations_data_human), "_", 12)[,3:12])
+        colnames(studies) <- c('FileName', 'Protocol', 'Exercisetype', 
+                               'Muscle', 'Sex', 'Age', 'Training',
+                               'Obesity', 'Disease', 'Biopsy', 'Duration')
+        
+        studies <- dplyr::filter(studies,
+                                 Protocol %in% input$human_corr_protocol,
+                                 Muscle %in% input$human_muscle, 
+                                 Sex %in% input$human_sex, 
+                                 Age %in% input$human_age, 
+                                 Training %in% input$human_fitness,
+                                 Obesity %in% input$human_weight,
+                                 Disease %in% input$human_disease
+        )
+        
+        #only keep rows with enough observations
+        selectedata <- correlations_data_human[colnames(correlations_data_human) %in% studies$FileName]
+        selectedata <- selectedata[rowSums(is.na(selectedata)) < ncol(selectedata)/2,]
+        
+        return(selectedata)
+    }, error=function(e) NULL)
+  })
+    
+  #calculate spearman correlation
+  corr_stats_human <- reactive({
+    validate(need(!is.null(corr_data_human()),     " "))
+    
+    withProgress(message = 'Calculating', value = 0, max=9, {
+      
+      selectedata <- corr_data_human()
+      
+        #select data for gene of interest
+        genename <- "NR4A3"
+        genename <- input$genename_metaanalysis_human
+        geneofinterest <- as.numeric(selectedata[genename,])
+        
         estimate <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$estimate
         p.value  <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$p.value
         
@@ -894,68 +933,61 @@ server <- function(input, output, session) {
         coeff <- coeff[order(coeff$adj.P.Val),]
         
         return(coeff)
-      })
-    }, error=function(e) NULL)
+    })
   })
   
-  output$CorrTable <- DT::renderDataTable(escape = FALSE, 
+  #make table output
+  output$corr_table_human <- DT::renderDataTable(escape = FALSE, 
                                           rownames = T, 
                                           selection = "single", {
-                                            validate(need(!is.null(Corr_stats()),   "Start by selecting a gene in the list of official gene names"))
+                                            validate(need(!is.null(corr_stats_human()),   "Start by selecting a gene in the list of official gene names"))
                                             
-                                            Corr_stats()
+                                            corr_stats_human()
                                           })
   
-  
-  #=======================================================================================
-  # Make correlation plot
-  #=======================================================================================
-  output$CorrPlot      <- renderPlot({ 
-    validate(need(!is.null(Corr_stats()),     " "))
-    validate(need(input$CorrTable_rows_selected!="",  "Click on a gene in the table to display the correlation")) 
+  # Make plot output
+  output$corr_plot_human      <- renderPlot({ 
+    validate(need(!is.null(corr_data_human()),     " "))
+    validate(need(input$corr_table_human_rows_selected!="",  "Click on a gene in the table to display the correlation")) 
     
-    Gene1 <- correlations_data[input$genename_correlation,]
-    Gene2 <- Corr_stats()
-    Gene2 <- rownames(Gene2[input$CorrTable_rows_selected,])
-    Gene2 <- correlations_data[Gene2,]
+    selectedata <- corr_data_human()
+
+    Gene1 <- selectedata[input$genename_metaanalysis_human,]
+    Gene2 <- corr_stats_human()
+    Gene2 <- rownames(Gene2[input$corr_table_human_rows_selected,])
+    Gene2 <- selectedata[Gene2,]
     data  <- data.frame(t(Gene1), t(Gene2))
     data <- cbind(data, str_split_fixed(rownames(data), "_", 12))
     colnames(data) <- c("Gene1", "Gene2", "logFC", "GEO",
                         "Protocol", "Exercise type", "Muscle", 
-                        "Sex", "Age", "Training", "Obesity", "Disease", "Biopsy time", "Training duration")
-    active <- ggplot(data, aes(x=Gene2, y=Gene1, 
-                               color=data[,as.numeric(input$selectgroup)],
-                               shape=data[,as.numeric(input$selectgroup)])) +
-      geom_smooth(method=lm, se=F, fullrange=TRUE, size=0.75) +
-      geom_point(size=3) +
+                        "Sex", "Age", "Training", "Obesity", "Disease", "Biopsy time", "Duration")
+    active <- ggplot(data, aes(x=Gene2, y=Gene1)) +
+      geom_smooth(method=lm, se=F, fullrange=TRUE, size=0.75, color="black") +
+      geom_point(aes(x=Gene2, y=Gene1, 
+                     color=Protocol,
+                     shape=Protocol),
+                 size=3) +
       labs(x=paste(rownames(Gene2), ", log2(fold-change)", sep=""),
-           y=paste(input$genename_correlation, ", log2(fold-change)", sep=""),
+           y=paste(input$genename_metaanalysis_human, ", log2(fold-change)", sep=""),
            title="") +
-      theme_bw() + theme + theme(legend.position="right") +
-      scale_shape_manual(values=c(15,16,17,15,16,17,15,16,17)) +
-      scale_color_manual(values=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999"))
+      theme_bw() + theme + theme(legend.position="right") + 
+      scale_shape_manual(values=c(15,16,17,18,15,16,17,18,15,16,17,18))
     return(active) 
   })
   
-  
-  #=======================================================================================
   # Make correlation description
-  #=======================================================================================
-  output$Corr_description <- renderText({
+  output$corr_description_human <- renderText({
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Collecting information on selected genes", value = 1)
     
-    validate(need(!is.null(Corr_stats()),     " "))
-    validate(need(input$CorrTable_rows_selected!="",  " ")) 
+    validate(need(!is.null(corr_data_human()),     " "))
+    validate(need(input$corr_table_human_rows_selected!="",  " ")) 
     
-    #find gene selected in the table
-    GENENAME <- Corr_stats()
-    GENENAME <- rownames(GENENAME[input$CorrTable_rows_selected,])
-    
-    #annotate with ENTREZID
-    Annotation <- correlations_refseq
-    ENTREZID <- Annotation[Annotation$GENENAME %in% GENENAME,2]
+    #find gene selected in the table and annotate with ENTREZID
+    GENENAME <- corr_stats_human()
+    GENENAME <- rownames(GENENAME[input$corr_table_human_rows_selected,])
+    ENTREZID <- correlations_annotation_human[correlations_annotation_human$SYMBOL %in% GENENAME,3]
     
     #Find information on NCBI webpage
     webpage <- read_html(paste("https://www.ncbi.nlm.nih.gov/gene/", ENTREZID, sep=''))
@@ -970,15 +1002,15 @@ server <- function(input, output, session) {
     } else data_html <- "No information available for this gene on NCBI."
     
     return(data_html)
-  })
+    })
   
-  output$Corr_link <- renderUI({
-    validate(need(!is.null(Corr_stats()),     " "))
-    validate(need(input$CorrTable_rows_selected!="",  " ")) 
+  output$corr_link_human <- renderUI({
+    validate(need(!is.null(corr_data_human()),     " "))
+    validate(need(input$corr_table_human_rows_selected!="",  " ")) 
     
     #find gene selected in the table
-    GENENAME <- Corr_stats()
-    GENENAME <- rownames(GENENAME[input$CorrTable_rows_selected,])
+    GENENAME <- corr_stats_human()
+    GENENAME <- rownames(GENENAME[input$corr_table_human_rows_selected,])
     
     #Make link to genecard
     GeneCards <- paste("https://www.genecards.org/cgi-bin/carddisp.pl?gene=", GENENAME, sep="")
@@ -988,6 +1020,8 @@ server <- function(input, output, session) {
     GeneCards <- HTML(GeneCards)
     return(GeneCards)
   })
+  
+  
   
   #---------------------------------------------------------------------
   #hide loading page
