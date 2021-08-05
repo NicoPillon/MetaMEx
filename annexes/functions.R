@@ -137,7 +137,7 @@ MetaAnalysis <- function(x, nrow){
 #===========================================================================================
 ModuleForestPlot <- function(metadata, genename, color, title) {
    #Validate selection criteria
-   #validate(need(!is.na(metadata[1,1]),   "No studies found - try different selection criteria"))
+   validate(need(!is.na(metadata[1,1]),   "No studies found - try different selection criteria"))
    #Plot the forest plot:
     metadata <- data.frame(metadata)
     max_n <- max(metadata[1:(nrow(metadata)-1),]$size, na.rm=T)+1 #used to plot weights

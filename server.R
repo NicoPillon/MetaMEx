@@ -824,7 +824,13 @@ server <- function(input, output, session) {
 
   #subset data for correlations
   corr_data_human <- eventReactive(input$updateCorrHuman, {
-    validate(need(!is.null(input$human_corr_protocol),     "Impossible to calculate correlations. Adjust your selection criteria and re-calculate."))
+    validate(need(input$human_corr_protocol, "Please select at least one exercise protocol."))
+    validate(need(input$human_muscle, 'No "Muscle" criteria selected'))
+    validate(need(input$human_sex, 'No "Sex" criteria selected'))
+    validate(need(input$human_age, 'No "Age" criteria selected'))
+    validate(need(input$human_fitness, 'No "Fitness" criteria selected'))
+    validate(need(input$human_weight, 'No "Weight" criteria selected'))
+    validate(need(input$human_disease, 'No "Health Status" criteria selected'))
     
     tryCatch({
         studies <- data.frame(colnames(correlations_data_human), 
