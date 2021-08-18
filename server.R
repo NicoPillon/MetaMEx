@@ -864,11 +864,13 @@ server <- function(input, output, session) {
     withProgress(message = 'Calculating', value = 0, max=9, {
       
       selectedata <- corr_data_human()
-      
+
         #select data for gene of interest
-        genename <- "NR4A3"
         genename <- input$genename_metaanalysis_human
         geneofinterest <- as.numeric(selectedata[genename,])
+        
+        #If input gene changes, recalculate
+        validate(need(input$genename_metaanalysis_human == genename,     "Please re-calculate correlation with the new selection "))
         
         estimate <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$estimate
         p.value  <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$p.value
@@ -994,6 +996,7 @@ server <- function(input, output, session) {
     GENENAME <- corr_stats_human()
     GENENAME <- rownames(GENENAME[input$corr_table_human_rows_selected,])
     ENTREZID <- correlations_annotation_human[correlations_annotation_human$SYMBOL %in% GENENAME,3]
+    validate(need(ENTREZID=="",  "No information available for this gene.")) 
     
     #Find information on NCBI webpage
     webpage <- read_html(paste("https://www.ncbi.nlm.nih.gov/gene/", ENTREZID, sep=''))

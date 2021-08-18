@@ -106,7 +106,7 @@ Whenever possible, we downloaded the raw data and re-processed studies using the
 ####  <a id="displayText" href="javascript:toggle(9);">What is the version history of the database?</a>
   <div class="div_help" id="toggleText9" style="display: none">
   
-* MetaMEx 3.2108 - Aug 2021. Addition of mouse datasets. Addition of timeline plots for acute and inactivity studies.
+* MetaMEx 3.2108 - Aug 2021. Addition of mouse datasets. Addition of timeline plots for acute and inactivity studies. All RNA sequencing datasets realigned to the most recent annotations (Human GRCh38.102 and mouse GRCm39.104).
 * MetaMEx 2.2101 - Jan 2021. Addition of recently published studies. Change to Bonferroni correction for multiple testing adjustment of the meta-analysis p-values. 
 * MetaMEx 2.2008 - Aug 2020. Major update of the database and style of the app. Addition of the most recent published datasets. Adjustment of colors and style for accessibility. 
 * MetaMEx 1.1912 - Dec 19, 2019. Added published HIIT studies.
