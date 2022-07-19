@@ -90,7 +90,7 @@ The meta-analysis summary was calculated using restricted maximum likelihood (me
 
 The timeline was calculated by collecting all data available in the database and annotate them by either time of the biopsy or inactivity duration. Moderated t-statistics were calculated with empirical Bayes statistics after blocking for other confounding parameters (sex, age, exercise type...).
 
-Adjustment for multiple testing was done with Bonferroni correction in all models.
+Since MetaMEx v3.2205, p values are adjusted for multiple-comparison with the more conservative Bonferroni method. This compensates for the increasing number of studies added to the database leading to more statistical power. The use of Bonferroni correction further reduces the risk of false positives.
 
   </div>
 
@@ -98,16 +98,16 @@ Adjustment for multiple testing was done with Bonferroni correction in all model
 ####  <a id="displayText" href="javascript:toggle(2);">Why are statistics on the website different from what is reported in the original publications?</a>
   <div class="div_help" id="toggleText2" style="display: none">
 
-Whenever possible, we downloaded the raw data and re-processed studies using the same pipeline. That means that the normalization methods that we used might differ from the ones used by the original authors. In addition, samples were often insufficiently annotated to allow us to run paired statistics comparing pre/post interventions. We therefore had to used unpaired statistics and lost power in the process. Finally, many studies pooled individuals of different age and BMI to have higher sample size. To allow proper comparison in the meta-analysis, we split these studies into sub groups and analysed them separately, therefore reducing the sample size and statistical power.
+Whenever possible, we downloaded the raw data and re-processed studies from raw data files (CEL, fastq...). That means that the processing and normalization methods that we used might differ from the ones used by the original authors. In addition, samples were often insufficiently annotated to allow us to run paired statistics comparing pre/post interventions. We therefore had to used unpaired statistics and lost power in the process. Finally, many studies pooled individuals of different age and BMI to have higher sample size. To allow proper comparison in the meta-analysis, we split these studies into sub groups and analyzed them separately, therefore reducing the sample size and statistical power.
 
   </div>
   
 
 ####  <a id="displayText" href="javascript:toggle(9);">What is the version history of the database?</a>
   <div class="div_help" id="toggleText9" style="display: none">
-  
-* MetaMEx 3.2108 - Aug 2021. Addition of mouse datasets. Addition of timeline plots for acute and inactivity studies. All RNA sequencing datasets realigned to the most recent annotations (Human GRCh38.102 and mouse GRCm39.104).
-* MetaMEx 2.2101 - Jan 2021. Addition of recently published studies. Change to Bonferroni correction for multiple testing adjustment of the meta-analysis p-values. 
+
+* MetaMEx 3.2204 - Apr 2022. Addition of mouse datasets. Addition of timeline plots for acute and inactivity studies. All RNA sequencing datasets realigned to the most recent annotations (Human GRCh38.102 and mouse GRCm39.104). Addition of the most recently published human and mouse datasets.
+* MetaMEx 2.2101 - Jan 2021. Addition of recently published studies.
 * MetaMEx 2.2008 - Aug 2020. Major update of the database and style of the app. Addition of the most recent published datasets. Adjustment of colors and style for accessibility. 
 * MetaMEx 1.1912 - Dec 19, 2019. Added published HIIT studies.
 * MetaMEx 1.1902 - Feb 12, 2019. Updated clinical characteristics of studies with obesity status.

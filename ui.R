@@ -2,7 +2,6 @@ source("annexes/functions.R")
 source("tabs/tab_home.R")
 source("tabs/tab_metaanalysis_human.R")
 source("tabs/tab_metaanalysis_mouse.R")
-#source("tabs/tab_correlations.R")
 source("tabs/tab_datasets.R")
 source("tabs/tab_download.R")
 source("tabs/tab_acknowledgments.R")
@@ -15,10 +14,19 @@ fluidPage(title="MetaMEx",
               id="loading_page",
               h1(style="color:white;font-weight:bold", "MetaMEx"),
               h4(style="color:white", "Meta-analysis of Skeletal Muscle Response to Exercise"),
-              div(style="align:center;bottom:0;padding:2% 0 20% 0;background-color:#5B768E",
-                  tags$img(src='dna.gif', width="20%"),
-                  h5(style="color:white", "Loading, please wait...")
-              ),
+              h5(style="color:white", "Loading, please wait..."),
+              div(style="align:center;bottom:0;padding:2% 2% 20% 0;background-color:#5B768E",
+                  tags$img(src='EFSD_Logo.png', style="padding:0 1% 0 1%"),
+                  tags$img(src='Novo_nordisk_foundation_Logo.png', style="padding:0 1% 0 1%"),
+                  tags$img(src='European_Commission_Logo.png', style="padding:0 1% 0 1%"),
+                  tags$br(), tags$br(),
+                  tags$img(src='Karolinska_Institutet_Logo.png', style="padding:0 1% 0 1%"),
+                  tags$img(src='SNIC_logo.png', style="padding:0 1% 0 1%"),
+                  tags$img(src='Swedish_Research_Council_for_Sport_Science_Logo.png', style="padding:0 1% 0 1%"),
+                  tags$br(), tags$br(),
+                  tags$img(src='Swedish_Research_Council_logo.png', style="padding:0 1% 0 1%"),
+                  tags$img(src='ForskaUtanDjurforsok_logo.png', style="padding:0 1% 0 1%")
+                  ),
               fluidRow(style="position:fixed;bottom:0;width:100%;height:45px;color:white;background-color:#5b768e;z-index:1000",
                        column(9, style="padding:0.4% 1% 1% 3%;", align="left",
                               a("Transcriptomic Profiling of Skeletal Muscle Adaptations to Exercise and Inactivity",
@@ -73,9 +81,6 @@ fluidPage(title="MetaMEx",
                            ########################################################################################        
                            tabMetaanalysis_mouse,  
 
-                           ########################################################################################        
-                           #tabCorrelations,
-                           
                            ########################################################################################        
                            tabDatasets,
                            

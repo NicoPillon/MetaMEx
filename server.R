@@ -149,34 +149,34 @@ server <- function(input, output, session) {
                                      selected = if (input$human_inactivity_protocol_allnone) names_human_categories[['inactivity_protocol_choice']])})
   
   
-  observe({ updateCheckboxGroupInput(session, 'mouse_muscle', 
-                                     choices = names_mouse_categories[['muscle_choice']], 
+  observe({ updateCheckboxGroupInput(session, 'mouse_muscle',
+                                     choices = names_mouse_categories[['muscle_choice']],
                                      selected = if (input$mouse_muscle_allnone) names_mouse_categories[['muscle_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_sex', 
-                                     choices = names_mouse_categories[['sex_choice']], 
+  observe({ updateCheckboxGroupInput(session, 'mouse_sex',
+                                     choices = names_mouse_categories[['sex_choice']],
                                      selected = if (input$mouse_sex_allnone) names_mouse_categories[['sex_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_age', 
-                                     choices = names_mouse_categories[['age_choice']], 
+  observe({ updateCheckboxGroupInput(session, 'mouse_age',
+                                     choices = names_mouse_categories[['age_choice']],
                                      selected = if (input$mouse_age_allnone) names_mouse_categories[['age_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_disease',             
-                                     choices = names_mouse_categories[['disease_choice']], 
+  observe({ updateCheckboxGroupInput(session, 'mouse_disease',
+                                     choices = names_mouse_categories[['disease_choice']],
                                      selected = if (input$mouse_disease_allnone) names_mouse_categories[['disease_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_exercise_type',        
-                                     choices = names_mouse_categories[['exercise_type_choice']], 
+  observe({ updateCheckboxGroupInput(session, 'mouse_exercise_type',
+                                     choices = names_mouse_categories[['exercise_type_choice']],
                                      selected = if (input$mouse_exercise_type_allnone) names_mouse_categories[['exercise_type_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_acute_biopsy',              
-                                     choices = names_mouse_categories[['acute_biopsy_choice']], 
+  observe({ updateCheckboxGroupInput(session, 'mouse_acute_biopsy',
+                                     choices = names_mouse_categories[['acute_biopsy_choice']],
                                      selected = if (input$mouse_acute_biopsy_allnone) names_mouse_categories[['acute_biopsy_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_training_duration',        
-                                     choices = names_mouse_categories[['training_duration_choice']], 
+  observe({ updateCheckboxGroupInput(session, 'mouse_training_duration',
+                                     choices = names_mouse_categories[['training_duration_choice']],
                                      selected = if (input$mouse_training_duration_allnone) names_mouse_categories[['training_duration_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_inactivity_duration', 
+  observe({ updateCheckboxGroupInput(session, 'mouse_inactivity_duration',
                                      choices=names_mouse_categories[['inactivity_duration_choice']],
                                      selected = if (input$mouse_inactivity_duration_allnone) names_mouse_categories[['inactivity_duration_choice']])})
-  observe({ updateCheckboxGroupInput(session, 'mouse_inactivity_protocol', 
+  observe({ updateCheckboxGroupInput(session, 'mouse_inactivity_protocol',
                                      choices=names_mouse_categories[['inactivity_protocol_choice']],
                                      selected = if (input$mouse_inactivity_protocol_allnone) names_mouse_categories[['inactivity_protocol_choice']])})
-  
+
   
   #=======================================================================================
   #
@@ -223,7 +223,7 @@ server <- function(input, output, session) {
                                    GEO %in% input$studies_human_AA)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata, nrow(stats_human_AA))
-    }, error=function(e) NULL)
+      }, error=function(e) NULL)
   })
   
   output$plot_human_AA <- renderPlot({ 
@@ -750,66 +750,66 @@ server <- function(input, output, session) {
   #
   #=======================================================================================
   output$data_stats_human_AA <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Acute_Aerobic.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Acute_Aerobic.csv" },
     content = function(file) {
       write.csv(stats_human_AA, file)
     })
   
   output$data_stats_human_AR <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Acute_Resistance.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Acute_Resistance.csv" },
     content = function(file) {
       write.csv(stats_human_AR, file)
     })
   
   output$data_stats_human_AH <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Acute_HIT.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Acute_HIT.csv" },
     content = function(file) {
       write.csv(stats_human_AH, file)
     })
   
   output$data_stats_human_TA <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Training_Aerobic.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Training_Aerobic.csv" },
     content = function(file) {
       write.csv(stats_human_TA, file)
     })
   
   output$data_stats_human_TR <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Training_Resistance.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Training_Resistance.csv" },
     content = function(file) {
       write.csv(stats_human_TR, file)
     })
   
   output$data_stats_human_TH <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Training_HIT.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Training_HIT.csv" },
     content = function(file) {
       write.csv(stats_human_TH, file)
     })
   
   output$data_stats_human_TC <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Training_Combined.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Training_Combined.csv" },
     content = function(file) {
       write.csv(stats_human_TC, file)
     })
   
   output$data_stats_human_IN <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_Human_Inactivity.csv" },
+    filename = function() { "MetaMEx_v3.2207_Human_Inactivity.csv" },
     content = function(file) {
       write.csv(stats_human_IN, file)
     })
   
   
   output$data_stats_mouse_AA <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_mouse_Acute_Aerobic.csv" },
+    filename = function() { "MetaMEx_v3.2207_mouse_Acute_Aerobic.csv" },
     content = function(file) {
       write.csv(stats_mouse_AA, file)
     })
   output$data_stats_mouse_TA <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_mouse_Training_Aerobic.csv" },
+    filename = function() { "MetaMEx_v3.2207_mouse_Training_Aerobic.csv" },
     content = function(file) {
       write.csv(stats_mouse_TA, file)
     })
   output$data_stats_mouse_IN <- downloadHandler(
-    filename = function() { "MetaMEx_v2.2108_mouse_Inactivity.csv" },
+    filename = function() { "MetaMEx_v3.2207_mouse_Inactivity.csv" },
     content = function(file) {
       write.csv(stats_mouse_IN, file)
     })
@@ -870,11 +870,16 @@ server <- function(input, output, session) {
         geneofinterest <- as.numeric(selectedata[genename,])
         
         #If input gene changes, recalculate
-        validate(need(input$genename_metaanalysis_human == genename,     "Please re-calculate correlation with the new selection "))
+        validate(need(input$genename_metaanalysis_human == genename,     
+                      "Please re-calculate correlation with the new selection "))
         
         estimate <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$estimate
         p.value  <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$p.value
         
+        if(nrow(selectedata < 100)){
+          Spearman.r <- apply(selectedata[1:nrow(selectedata),], 1, estimate)
+          Spearman.p <- apply(selectedata[1:nrow(selectedata),], 1, p.value)
+        } else {
         incProgress(0.4, detail="Spearman coefficients")
         Spearman.r1 <- apply(selectedata[1:1000,], 1, estimate)
         incProgress(0.4, detail="Spearman coefficients")
@@ -930,7 +935,7 @@ server <- function(input, output, session) {
         Spearman.p <- c(Spearman.p1, Spearman.p2, Spearman.p3, Spearman.p4,
                         Spearman.p5, Spearman.p6, Spearman.p7, Spearman.p8,
                         Spearman.p9, Spearman.p10, Spearman.p11, Spearman.p12)
-        
+        }
         incProgress(0.4, detail="Making table")
         Spearman.adj.P.Val <- p.adjust(Spearman.p, method="bonferroni")
         Spearman.r <- round(Spearman.r, digits=3)
@@ -948,7 +953,8 @@ server <- function(input, output, session) {
   output$corr_table_human <- DT::renderDataTable(escape = FALSE, 
                                           rownames = T, 
                                           selection = "single", {
-                                            validate(need(!is.null(corr_stats_human()),   "Start by selecting a gene in the list of official gene names"))
+                                            validate(need(!is.null(corr_stats_human()),   
+                                                          "Start by selecting a gene in the list of official gene names"))
                                             
                                             corr_stats_human()
                                           })
@@ -960,15 +966,19 @@ server <- function(input, output, session) {
     
     selectedata <- corr_data_human()
 
-    Gene1 <- selectedata[input$genename_metaanalysis_human,]
-    Gene2 <- corr_stats_human()
-    Gene2 <- rownames(Gene2[input$corr_table_human_rows_selected,])
-    Gene2 <- selectedata[Gene2,]
+    #collect names of the 2 genes to correlate
+    Gene1name <- input$genename_metaanalysis_human
+    Gene2name <- rownames(corr_stats_human()[input$corr_table_human_rows_selected,])
+    
+    #find data from the 2 genes and merge
+    Gene1 <- selectedata[Gene1name,]
+    Gene2 <- selectedata[Gene2name,]
     data  <- data.frame(t(Gene1), t(Gene2))
     data <- cbind(data, str_split_fixed(rownames(data), "_", 12))
     colnames(data) <- c("Gene1", "Gene2", "logFC", "GEO",
                         "Protocol", "Exercise type", "Muscle", 
-                        "Sex", "Age", "Training", "Obesity", "Disease", "Biopsy time", "Duration")
+                        "Sex", "Age", "Training", "Obesity", "Disease", 
+                        "Biopsy time", "Duration")
     active <- ggplot(data, aes(x=Gene2, y=Gene1)) +
       geom_smooth(method=lm, se=F, fullrange=TRUE, size=0.75, color="black") +
       geom_point(aes(x=Gene2, y=Gene1, 
@@ -993,10 +1003,10 @@ server <- function(input, output, session) {
     validate(need(input$corr_table_human_rows_selected!="",  " ")) 
     
     #find gene selected in the table and annotate with ENTREZID
-    GENENAME <- corr_stats_human()
-    GENENAME <- rownames(GENENAME[input$corr_table_human_rows_selected,])
-    ENTREZID <- correlations_annotation_human[correlations_annotation_human$SYMBOL %in% GENENAME,3]
-    validate(need(ENTREZID=="",  "No information available for this gene.")) 
+    GENENAME <- rownames(corr_stats_human()[input$corr_table_human_rows_selected,])
+    ENTREZID <- correlations_annotation_human[correlations_annotation_human$SYMBOL %in% GENENAME, 3][1]
+    print(c(GENENAME, ENTREZID))
+    validate(need(ENTREZID!="",  "No information available for this gene.")) 
     
     #Find information on NCBI webpage
     webpage <- read_html(paste("https://www.ncbi.nlm.nih.gov/gene/", ENTREZID, sep=''))
@@ -1008,7 +1018,7 @@ server <- function(input, output, session) {
       data_html <- gsub('.*Summary', '', data_html)
       data_html <- gsub('\\].*', ']', data_html)
       data_html <- trimws(data_html)
-    } else data_html <- "No information available for this gene on NCBI."
+    } else data_html <- "Cannot connect to NCBI."
     
     return(data_html)
     })

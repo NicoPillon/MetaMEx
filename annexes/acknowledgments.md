@@ -26,18 +26,16 @@ from the National Bioinformatics Infrastructure Sweden (<a href="https://nbis.se
 ---
 
 ## Funding
-This work was supported by the Marie Sklodowska-Curie Actions (European Commission), the Novo Nordisk Foundation, the Swedish Diabetes Foundation, the Swedish Research Council, the Strategic Research Program in Diabetes at Karolinska Institutet, the Stockholm County Council, the Swedish Research Council for Sport Science and the EFSD European Research Programme on New Targets for Type 2 Diabetes supported by an educational research grant from MSD.
+This work was supported by the Marie Sklodowska-Curie Actions (European Commission), the Novo Nordisk Foundation, the Swedish Diabetes Foundation, the European Foundation for the Study of Diabetes (EFSD), the Swedish Research Council, the Strategic Research Program in Diabetes at Karolinska Institutet, the Swedish Research Council for Sport Science and the foundation for research without animal research (Forska utan Djurforsök)
 
 ![](funding_bodies/Karolinska_Institutet_Logo.png)
 ![](funding_bodies/European_Commission_Logo.png)
 ![](funding_bodies/Novo_nordisk_foundation_Logo.png)
 ![](funding_bodies/Swedish_Research_Council_logo.png)
-![](funding_bodies/Diabetesfounden_logo.png)
 ![](funding_bodies/Swedish_Research_Council_for_Sport_Science_Logo.png)
-![](funding_bodies/SLL_Logo.png)
 ![](funding_bodies/EFSD_Logo.png)
 ![](funding_bodies/SNIC_logo.png)
-
+![](funding_bodies/ForskaUtanDjurforsok_logo.png)
 
 ---
 
