@@ -26,29 +26,7 @@ fluidPage(title="MetaMEx",
                   tags$br(), tags$br(),
                   tags$img(src='Swedish_Research_Council_logo.png', style="padding:0 1% 0 1%"),
                   tags$img(src='ForskaUtanDjurforsok_logo.png', style="padding:0 1% 0 1%")
-                  ),
-              fluidRow(style="position:fixed;bottom:0;width:100%;height:45px;color:white;background-color:#5b768e;z-index:1000",
-                       column(9, style="padding:0.4% 1% 1% 3%;", align="left",
-                              a("Transcriptomic Profiling of Skeletal Muscle Adaptations to Exercise and Inactivity",
-                                href="https://doi.org/10.1038/s41467-019-13869-w", target="_blank", style="color:#D9DADB"), 
-                              tags$br(),
-                              "Pillon, Zierath et al. Nat Commun. 2020; 11: 470."),
-                       column(3, style="padding:0.4% 3% 1% 1%;", align="right",
-                              tags$b(HTML("Share:&nbsp")),
-                              actionButton("twitter_share", 
-                                           label=NULL, 
-                                           icon=icon("twitter"),
-                                           onclick = sprintf("window.open('%s')", url_twitter)),
-                              actionButton("linkedin_share", 
-                                           label=NULL, 
-                                           icon=icon("linkedin"),
-                                           onclick = sprintf("window.open('%s')", url_linkedin)),
-                              actionButton("facebook_share", 
-                                           label=NULL, 
-                                           icon=icon("facebook"),
-                                           onclick = sprintf("window.open('%s')", url_facebook))
-                       )
-              )
+                  )
           ),
           
           hidden(
@@ -85,7 +63,7 @@ fluidPage(title="MetaMEx",
                            tabDatasets,
                            
                            ########################################################################################        
-                           tabDownloads,
+                           #tabDownloads,
                            
                            ########################################################################################        
                            tabPanel("Help", value="Tutorial",
