@@ -227,14 +227,21 @@ server <- function(input, output, session) {
   })
   
   output$plot_human_AA <- renderPlot({ 
+    data_human_AA <- metadata
+    genename <- "NR4A3"
+    #collect data from inputs
+    genename <- input$genename_metaanalysis_human
+    data_human_AA <- data_human_AA()
     #show progress
     progress <- shiny::Progress$new()
     on.exit(progress$close())
     progress$set(message = "Calculating", value = 1)
     #call module to make forest plot
-    finalplot <- ModuleForestPlot(data_human_AA(), paste(input$genename_metaanalysis_human),
+    finalplot <- ModuleForestPlot(data_human_AA, 
+                                  genename,
                                   "#9D6807", 
                                   "acute aerobic exercise studies")
+    finalplot
     #display forest plot
     return(finalplot)
   })

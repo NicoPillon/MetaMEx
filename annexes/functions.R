@@ -163,7 +163,7 @@ ModuleForestPlot <- function(metadata, genename, color, title) {
                        c("adj.P.Val"   , format(metadata[,"adj.P.Val"],   scientific=T, digits=2)),
                        c("n" , metadata[,"size"]))
     #replace NA with blanks
-    tabletext[,2] <- gsub("NA", " ", tabletext[,3])
+    tabletext[,2] <- gsub("NA", " ", tabletext[,2])
     tabletext[,3] <- gsub("NA", " ", tabletext[,3])
     #Make nicer file name
     tabletext[,1] <- gsub("_", ", ", tabletext[,1])
