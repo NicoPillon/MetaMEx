@@ -11,7 +11,7 @@ RUN apt-get update && \
 
 RUN Rscript -e 'install.packages(c("shinyjs", "shinycssloaders", "rmarkdown"))'
 
-RUN Rscript -e 'install.packages(c("ggplot2", "gplots", "ggpubr", "ggprism", ggfortify"))'
+RUN Rscript -e 'install.packages(c("ggplot2", "gplots", "ggpubr", "ggprism", "ggfortify"))'
 
 RUN Rscript -e 'install.packages(c("dplyr", "DT", "stringr", "scales", "rvest", "feather"))'
 
