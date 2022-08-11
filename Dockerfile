@@ -9,7 +9,13 @@ RUN apt-get update && \
     apt-get install -y git libxml2-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e 'install.packages(c("DT", "dplyr", "forestplot", "ggfortify","ggplot2","ggpubr", "gplots", "grid",   "gridExtra", "metafor", "readr", "rmarkdown", "stringr", "readxl", "shinyjs", "scales","Rcpp","rvest", "feather"))'
+RUN Rscript -e 'install.packages(c("shinyjs", "shinycssloaders", "rmarkdown"))'
+
+RUN Rscript -e 'install.packages(c("ggplot2", "gplots", "ggpubr", "ggprism", ggfortify"))'
+
+RUN Rscript -e 'install.packages(c("dplyr", "DT", "stringr", "scales", "rvest", "feather"))'
+
+RUN Rscript -e 'install.packages(c("forestplot", "metafor"))'
 
 RUN cd /srv/shiny-server/ && \
     git clone https://github.com/${REPO}.git app && \

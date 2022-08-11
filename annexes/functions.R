@@ -2,21 +2,28 @@
 # Libraries
 #===========================================================================================
 library(shinyjs)
-library(dplyr)
-library(DT)
-library(forestplot)
-library(ggfortify)
+library(shinycssloaders)
+library(rmarkdown)
+
 library(ggplot2)
 library(gplots)
 library(ggpubr)
 library(ggprism)
-library(metafor)
+library(ggfortify)
+
+library(dplyr)
+library(DT)
 library(stringr)
 library(scales)
 library(rvest)
-library(rmarkdown)
 library(feather)
-library(shinycssloaders)
+
+library(forestplot)
+library(metafor)
+
+
+
+
 
 #===========================================================================================
 # Lists of the different studies, categories and gene names
