@@ -201,10 +201,27 @@ tabMetaanalysis_human <- tabPanel("Human", value="panelApp",
                                                                                        uiOutput ("corr_link_human")
                                                                                 )
                                                                        )
+                                                              ),
+                                                              
+                                                              #= Tab overview =====================================================        
+                                                              tabPanel("Overview", 
+                                                                       value="panelAppOverview",
+                                                                       fluidRow(style="background-color: white", 
+                                                                                column(10, style="padding:2% 5% 2% 2%;margin:0",
+                                                                                       plotOutput("plot_overview") %>% withSpinner(color="#5b768e"),
+                                                                                       tags$br(),
+                                                                                       "This plot provides an overview of the meta-analysis for the selected gene.
+                                                                                       The plot is reactive and updated based on the selection criteria used in all individual forest plots.
+                                                                                       The data and meta-analysis calculation for the selected gene and population of interest can be downloaded here:",
+                                                                                       tags$br(), tags$br(),
+                                                                                       downloadButton("download_human_overview", label = "Download selected data"),
+                                                                                       tags$br()
+                                                                                )
+                                                                       )
                                                               )
                                                   )
-                                                  
                                            )
+                                                  
                                   ),
                                   
                                   # Row Select Population ###################################################################################

@@ -196,7 +196,7 @@ server <- function(input, output, session) {
   
   #=======================================================================================
   #
-  # Code for forrest plots - Human
+  # Code for forest plots - Human
   #
   #=======================================================================================
   
@@ -498,13 +498,129 @@ server <- function(input, output, session) {
   })
   
   
+  # Human overview plot
+  #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+  
+  data_human_overview <- reactive({
+    
+    #create a NULL dataframe if data is not available
+    null_df <- data.frame(logFC = NA, adj.P.Val = NA,
+                          CI.L = NA, CI.R = NA,
+                          size = 0,
+                          Studies = "Meta-analysis score")
+    
+    # collect data from the different forest plots - if no data available in one group, replace with the empty dataframe
+    data_human_AA <- if(!is.na(data_human_AA())){ data_human_AA() } else null_df
+    data_human_AR <- if(!is.na(data_human_AR())){ data_human_AR() } else null_df
+    data_human_AH <- if(!is.na(data_human_AH())){ data_human_AH() } else null_df
+    data_human_IN <- if(!is.na(data_human_IN())){ data_human_IN() } else null_df
+    data_human_TA <- if(!is.na(data_human_TA())){ data_human_TA() } else null_df
+    data_human_TR <- if(!is.na(data_human_TR())){ data_human_TR() } else null_df
+    data_human_TH <- if(!is.na(data_human_TH())){ data_human_TH() } else null_df
+    data_human_TC <- if(!is.na(data_human_TC())){ data_human_TC() } else null_df
+
+    # rename the datasets
+    data_human_AA$Studies <- gsub("Meta-analysis score", "Acute Aerobic Meta-analysis", data_human_AA$Studies)
+    data_human_AR$Studies <- gsub("Meta-analysis score", "Acute Resistance Meta-analysis", data_human_AR$Studies)
+    data_human_AH$Studies <- gsub("Meta-analysis score", "Acute HIT Meta-analysis", data_human_AH$Studies)
+    data_human_IN$Studies <- gsub("Meta-analysis score", "Inactivity Meta-analysis", data_human_IN$Studies)
+    data_human_TA$Studies <- gsub("Meta-analysis score", "Training Aerobic Meta-analysis", data_human_TA$Studies)
+    data_human_TR$Studies <- gsub("Meta-analysis score", "Training Resistance Meta-analysis", data_human_TR$Studies)
+    data_human_TC$Studies <- gsub("Meta-analysis score", "Training Combined Meta-analysis", data_human_TC$Studies)
+    data_human_TH$Studies <- gsub("Meta-analysis score", "Training HIT Meta-analysis", data_human_TH$Studies)
+    
+    # join everything in one table
+    overview_data <- rbind(data_human_AA,
+                           data_human_AR,
+                           data_human_AH,
+                           data_human_IN,
+                           data_human_TA,
+                           data_human_TR,
+                           data_human_TH,
+                           data_human_TC)
+    
+    overview_data <- overview_data[!is.na(overview_data$Studies),]
+    overview_data <- overview_data[,c(6,1:5)]
+    rownames(overview_data) <- c()
+
+    return(overview_data)
+    
+  })
+    
+    
+  output$plot_overview <- renderPlot({
+    
+    overview_data <- data_human_overview()
+    
+    #select only meta-analysis scores for plotting
+    overview_data <- overview_data[grepl("Meta-analysis", overview_data$Studies),]
+
+    # adjust groups and names
+    overview_data$group <- gsub(" .*", "", overview_data$Studies)
+    overview_data$Studies <- gsub(" Meta-analysis", "", overview_data$Studies)
+    overview_data$Studies <- gsub(" ", "\n", overview_data$Studies)
+
+    
+    # need data in at least one of the protocols to make a plot
+    validate(need(sum(is.na(overview_data$logFC)) != length(overview_data$logFC),
+                  "No studies found - try different selection criteria"))
+    
+    # prepare stats to add to plot
+    overview_data$p.adj.signif <- paste0("adj.P.Val =\n",
+                                         signif(overview_data$adj.P.Val, 1))
+    
+    overview_data$p.adj.signif <- ifelse(overview_data$adj.P.Val < 0.05,
+                                         paste0("adj.P.Val =\n",
+                                                signif(overview_data$adj.P.Val, 2)),
+                                         "ns")
+    
+    overview_data$p.adj.signif <- ifelse(is.na(overview_data$p.adj.signif),
+                                         "Not\nenough\nstudies\nincluded",
+                                         overview_data$p.adj.signif)
+    
+    overview_data$y.position <- overview_data$CI.R + 0.3
+    overview_data$y.position <- ifelse(is.na(overview_data$y.position),
+                                       -1,
+                                       overview_data$y.position)
+    
+    ggbarplot(overview_data, 
+              x = "Studies", y = "logFC",
+              fill = "group") +
+      xlab(NULL) +
+      theme_bw() +
+      theme(plot.title  = element_text(face="bold", color="black", size=12, angle=0),
+            axis.text.x = element_text(color="black", size=10, angle=0, hjust = 0.5),
+            axis.text.y = element_text(color="black", size=10, angle=0, hjust = 1),
+            axis.title  = element_text(face="bold", color="black", size=12, angle=0),
+            legend.text   = element_text(color="black", size=9, angle=0),
+            legend.title  = element_text(face="bold", color="black", size=10, angle=0),
+            legend.position="none") +
+      geom_hline(yintercept = 0) +
+      geom_point() +
+      geom_errorbar(aes(ymin=CI.L, ymax=CI.R), 
+                    width=.2,
+                    position=position_dodge(.9)) +
+      add_pvalue(overview_data, bracket.size = NA, 
+                 xmin = "Studies",
+                 xmax = "Studies",
+                 label = "p.adj.signif",
+                 y.position = "y.position", 
+                 label.size = 3) +
+      scale_y_continuous(expand = expansion(mult = c(0.1, 0.15)))
+    
+    
+    
+  })
+  
+  
+  
   #=======================================================================================
   #
-  # Code for forrest plots - Mouse
+  # Code for forest plots - Mouse
   #
   #=======================================================================================
   
-  # Acute Aerobic forest plot
+  # Mouse aerobic forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   data_mouse_AA <- reactive({
     tryCatch({  
@@ -544,7 +660,7 @@ server <- function(input, output, session) {
   })
   
   
-  # Training Aerobic forest plot
+  # Mouse training forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   data_mouse_TA <- reactive({
     tryCatch({  
@@ -584,7 +700,7 @@ server <- function(input, output, session) {
   })
   
   
-  # Inactivity forest plot
+  # Mouse inactivity forest plot
   #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
   data_mouse_IN <- reactive({
     tryCatch({  
@@ -624,6 +740,7 @@ server <- function(input, output, session) {
   })
   
   
+  
   #=======================================================================================
   #
   # Code for timelines
@@ -647,11 +764,12 @@ server <- function(input, output, session) {
     mydata <- data.frame(cessation=factor(colnames(res), levels=c('pre', '0_1', '2_3', '4_6', '24', '48', '72')),
                          logFC=as.numeric(res[genename,])) 
     
-    ggplot(mydata, aes(x=cessation, y=logFC, fill=cessation)) + theme_bw() +
+    ggplot(mydata, aes(x=cessation, y=logFC, fill=cessation)) + 
       geom_hline(yintercept=0, color="gray50", linetype="dashed") +
       geom_boxplot() +
       labs(x="Time after exercise (h)",
            y=paste(genename, ", log2(FC)", sep="")) +
+      theme_bw() +
       theme(plot.title  = element_text(face="bold", color="black", size=12, angle=0),
             axis.text.x = element_text(color="black", size=10, angle=0, hjust = 0.5),
             axis.text.y = element_text(color="black", size=10, angle=0, hjust = 1),
@@ -750,79 +868,9 @@ server <- function(input, output, session) {
     return(stats)
   })
   
+
   
-  #=======================================================================================
-  #
-  # Download buttons
-  #
-  #=======================================================================================
-  output$data_stats_human_AA <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Acute_Aerobic.csv" },
-    content = function(file) {
-      write.csv(stats_human_AA, file)
-    })
-  
-  output$data_stats_human_AR <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Acute_Resistance.csv" },
-    content = function(file) {
-      write.csv(stats_human_AR, file)
-    })
-  
-  output$data_stats_human_AH <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Acute_HIT.csv" },
-    content = function(file) {
-      write.csv(stats_human_AH, file)
-    })
-  
-  output$data_stats_human_TA <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Training_Aerobic.csv" },
-    content = function(file) {
-      write.csv(stats_human_TA, file)
-    })
-  
-  output$data_stats_human_TR <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Training_Resistance.csv" },
-    content = function(file) {
-      write.csv(stats_human_TR, file)
-    })
-  
-  output$data_stats_human_TH <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Training_HIT.csv" },
-    content = function(file) {
-      write.csv(stats_human_TH, file)
-    })
-  
-  output$data_stats_human_TC <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Training_Combined.csv" },
-    content = function(file) {
-      write.csv(stats_human_TC, file)
-    })
-  
-  output$data_stats_human_IN <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_Human_Inactivity.csv" },
-    content = function(file) {
-      write.csv(stats_human_IN, file)
-    })
-  
-  
-  output$data_stats_mouse_AA <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_mouse_Acute_Aerobic.csv" },
-    content = function(file) {
-      write.csv(stats_mouse_AA, file)
-    })
-  output$data_stats_mouse_TA <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_mouse_Training_Aerobic.csv" },
-    content = function(file) {
-      write.csv(stats_mouse_TA, file)
-    })
-  output$data_stats_mouse_IN <- downloadHandler(
-    filename = function() { "MetaMEx_v3.2207_mouse_Inactivity.csv" },
-    content = function(file) {
-      write.csv(stats_mouse_IN, file)
-    })
-  
-  
-  
+
   #=======================================================================================
   #
   # Correlations - human
@@ -1047,6 +1095,84 @@ server <- function(input, output, session) {
     return(GeneCards)
   })
   
+  
+  #=======================================================================================
+  #
+  # Download buttons
+  #
+  #=======================================================================================
+  output$download_data_human_AA <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Acute_Aerobic.csv" },
+    content = function(file) {
+      write.csv(stats_human_AA, file)
+    })
+  
+  output$download_data_human_AR <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Acute_Resistance.csv" },
+    content = function(file) {
+      write.csv(stats_human_AR, file)
+    })
+  
+  output$download_data_human_AH <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Acute_HIT.csv" },
+    content = function(file) {
+      write.csv(stats_human_AH, file)
+    })
+  
+  output$download_data_human_TA <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Training_Aerobic.csv" },
+    content = function(file) {
+      write.csv(stats_human_TA, file)
+    })
+  
+  output$download_data_human_TR <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Training_Resistance.csv" },
+    content = function(file) {
+      write.csv(stats_human_TR, file)
+    })
+  
+  output$download_data_human_TH <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Training_HIT.csv" },
+    content = function(file) {
+      write.csv(stats_human_TH, file)
+    })
+  
+  output$download_data_human_TC <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Training_Combined.csv" },
+    content = function(file) {
+      write.csv(stats_human_TC, file)
+    })
+  
+  output$download_data_human_IN <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_Human_Inactivity.csv" },
+    content = function(file) {
+      write.csv(stats_human_IN, file)
+    })
+  
+  
+  output$download_data_mouse_AA <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_mouse_Acute_Aerobic.csv" },
+    content = function(file) {
+      write.csv(stats_mouse_AA, file)
+    })
+  output$download_data_mouse_TA <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_mouse_Training_Aerobic.csv" },
+    content = function(file) {
+      write.csv(stats_mouse_TA, file)
+    })
+  output$download_data_mouse_IN <- downloadHandler(
+    filename = function() { "MetaMEx_v3.2207_mouse_Inactivity.csv" },
+    content = function(file) {
+      write.csv(stats_mouse_IN, file)
+    })
+  
+  output$download_human_overview <- downloadHandler(
+    filename = function() { 
+      paste0( input$genename_metaanalysis_human,
+              "_MetaMEx_v3.2207.csv") },
+    content = function(file) {
+      write.csv(data_human_overview(), file, row.names = F)
+    })
   
   
   #---------------------------------------------------------------------

@@ -8,12 +8,15 @@ library(forestplot)
 library(ggfortify)
 library(ggplot2)
 library(gplots)
+library(ggpubr)
+library(ggprism)
 library(metafor)
 library(stringr)
 library(scales)
 library(rvest)
 library(rmarkdown)
 library(feather)
+library(shinycssloaders)
 
 #===========================================================================================
 # Lists of the different studies, categories and gene names
@@ -106,6 +109,7 @@ firstup <- function(x) {
 #===========================================================================================
 MetaAnalysis <- function(x, nrow){
   validate(need(!is.null(x),   "No studies found - try different selection criteria"))
+  
   #Order by logFC
   x <- x[order(x$logFC, decreasing=T),]
 
@@ -114,7 +118,7 @@ MetaAnalysis <- function(x, nrow){
   x <- x[which(!(is.infinite(x$logFC))), ]
   
   #if only one row, skip calculation
-  if(nrow(x)<2){
+  if(nrow(x) < 2){
     #Remake the table with desired columns, rbind the calculations for the one study
     x <- rbind(x[,c('logFC', 'adj.P.Val', 'CI.L', 'CI.R', 'size', 'Studies')],
                c(as.numeric(x[,1:4]), sum(x$size, na.rm=T), NA))
