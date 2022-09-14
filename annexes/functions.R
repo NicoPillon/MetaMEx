@@ -22,9 +22,6 @@ library(forestplot)
 library(metafor)
 
 
-
-
-
 #===========================================================================================
 # Lists of the different studies, categories and gene names
 #===========================================================================================
@@ -120,10 +117,6 @@ MetaAnalysis <- function(x, nrow){
   #Order by logFC
   x <- x[order(x$logFC, decreasing=T),]
 
-  # Remove invalid studies
-  x <- x[which(!(is.na(x$logFC))), ]
-  x <- x[which(!(is.infinite(x$logFC))), ]
-  
   #if only one row, skip calculation
   if(nrow(x) < 2){
     #Remake the table with desired columns, rbind the calculations for the one study

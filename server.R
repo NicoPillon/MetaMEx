@@ -27,6 +27,10 @@ server <- function(input, output, session) {
     incProgress(1, detail="Inactivity studies")
     stats_human_IN <- data.frame(read_feather("data/merged_stats/stats_human_inactivity.feather"), row.names=1)
     
+    # Exclusion of specific studies
+    stats_human_TA <- stats_human_TA[!grepl("GSE165630", colnames(stats_human_TA))]
+    stats_human_TR <- stats_human_TR[!grepl("GSE165630", colnames(stats_human_TR))]
+    
     # Data for reference tables - human
     reftable_human_legend <- readRDS("data/annotation/reftable_human_legend.Rds") # Load the table describing the legend of the tables
     reftable_human_acute <- readRDS("data/annotation/reftable_human_acute.Rds") # Load the table describing the legend of the tables
@@ -227,8 +231,6 @@ server <- function(input, output, session) {
   })
   
   output$plot_human_AA <- renderPlot({ 
-    data_human_AA <- metadata
-    genename <- "NR4A3"
     #collect data from inputs
     genename <- input$genename_metaanalysis_human
     data_human_AA <- data_human_AA()
@@ -359,6 +361,7 @@ server <- function(input, output, session) {
   data_human_TA <- reactive({
     tryCatch({  
       #select genes With feather
+      selectedata <- stats_human_TA["NR4A3",]
       selectedata <- stats_human_TA[input$genename_metaanalysis_human,]
       selectedata <- DataForGeneName(selectedata)
       #load module for selection of population of interest

@@ -3,8 +3,8 @@ title: "Tutorial"
 output: html_document
 ---
 
-####  <a id="displayText" href="javascript:toggle(5);">I cannot find my favorite gene!</a>
-  <div class="div_help" id="toggleText5" style="display: none">
+####  <a id="displayText" href="javascript:toggle(1);">I cannot find my favorite gene!</a>
+  <div class="div_help" id="toggleText1" style="display: none">
 
 Start typing the gene name and suggestions will appear in the scroll menu. MetaMEx works with official gene symbols, for instance the official gene name of PGC1α is PPARGC1A.
 
@@ -15,8 +15,8 @@ Genes are sometimes present in the forest plots but not in the timeline plots. T
   </div>  
 
   
-####  <a id="displayText" href="javascript:toggle(4);">My favorite gene is not detected in many studies!</a>
-  <div class="div_help" id="toggleText4" style="display: none">
+####  <a id="displayText" href="javascript:toggle(2);">My favorite gene is not detected in many studies!</a>
+  <div class="div_help" id="toggleText2" style="display: none">
 
 In order to give a transparent overview of the currently available data, all studies are presented, even if genes are not detected. Older studies, or custom arrays often have a limited number of probes and therefore fewer detected genes. On the other hand, the more recent RNA sequencing datasets often have more depth and detect non-coding RNAs which are not present in gene arrays.
 
@@ -33,8 +33,8 @@ A forest plot is a graphical representation of results from several scientific s
   </div> 
   
   
-####  <a id="displayText" href="javascript:toggle(6);">How do I select my population of interest?</a>
-  <div class="div_help" id="toggleText6" style="display: none;">
+####  <a id="displayText" href="javascript:toggle(4);">How do I select my population of interest?</a>
+  <div class="div_help" id="toggleText4" style="display: none;">
 
 MetaMEx compiles more than 90 studies which include volunteers of different age, sex, weight, fitness, weight and health. Studies can be included or excluded from the analysis by scrolling at the bottom of the page and checking the boxes. For instance, select males or females by checking the corresponding tick boxes.
 
@@ -50,8 +50,8 @@ MetaMEx compiles more than 90 studies which include volunteers of different age,
   </div>  
   
   
-####  <a id="displayText" href="javascript:toggle(7);">What filters can I apply?</a>
-  <div class="div_help" id="toggleText7" style="display: none">
+####  <a id="displayText" href="javascript:toggle(5);">What filters can I apply?</a>
+  <div class="div_help" id="toggleText5" style="display: none">
 
 After selecting  either acute exercise, exercise training or inactivity, a specific menu will appear on the right of the page. This menu includes parameters such as exercise duration or time of biopsy collection after exercise cessation. Another list will appear under the forest plot to select or unselect specific datasets.
 
@@ -64,8 +64,8 @@ After selecting  either acute exercise, exercise training or inactivity, a speci
   </div>  
 
 
-####  <a id="displayText" href="javascript:toggle(8);">Why do studies have such a complicated name?</a>
-  <div class="div_help" id="toggleText8" style="display: none">
+####  <a id="displayText" href="javascript:toggle(6);">Why do studies have such a complicated name?</a>
+  <div class="div_help" id="toggleText6" style="display: none">
 
 All studies were annotated with as much information as possible about age, weight, health, biopsy, muscle, etc. The title of the studies reflects the clinical data and protocol used for a specific study. 
 
@@ -76,8 +76,8 @@ A detailed description of the labels is availabe in Datasets/Annotation.
   </div>  
   
   
-####  <a id="displayText" href="javascript:toggle(1);">What analysis and statistical methods were used?</a>
-  <div class="div_help" id="toggleText1" style="display: none">
+####  <a id="displayText" href="javascript:toggle(7);">What analysis and statistical methods were used?</a>
+  <div class="div_help" id="toggleText7" style="display: none">
 
 The meta-analysis was created by collecting publicly available studies on mRNA expression levels in human skeletal muscle after exercise or inactivity. Statistics were first performed individually for each array. 
 
@@ -95,8 +95,8 @@ Since MetaMEx v3.2205, p values are adjusted for multiple-comparison with the mo
   </div>
 
 
-####  <a id="displayText" href="javascript:toggle(2);">Why are statistics on the website different from what is reported in the original publications?</a>
-  <div class="div_help" id="toggleText2" style="display: none">
+####  <a id="displayText" href="javascript:toggle(8);">Why are statistics on the website different from what is reported in the original publications?</a>
+  <div class="div_help" id="toggleText8" style="display: none">
 
 Whenever possible, we downloaded the raw data and re-processed studies from raw data files (CEL, fastq...). That means that the processing and normalization methods that we used might differ from the ones used by the original authors. In addition, samples were often insufficiently annotated to allow us to run paired statistics comparing pre/post interventions. We therefore had to used unpaired statistics and lost power in the process. Finally, many studies pooled individuals of different age and BMI to have higher sample size. To allow proper comparison in the meta-analysis, we split these studies into sub groups and analyzed them separately, therefore reducing the sample size and statistical power.
 
@@ -118,3 +118,9 @@ Whenever possible, we downloaded the raw data and re-processed studies from raw 
   
 
 
+####  <a id="displayText" href="javascript:toggle(10);">Where any studies excluded from the database?</a>
+  <div class="div_help" id="toggleText10" style="display: none">
+  
+Only one study, GSE165630, was excluded from the database. This study compared trained and untrained individuals. However, the studies clustered with acute exercise studies, and exhibited a gene signature typical of an acute response to exercise.
+
+  </div>
