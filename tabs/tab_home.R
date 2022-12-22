@@ -33,7 +33,7 @@ tabHome <- tabPanel("Home",
                                 "The app to meta-analyse skeletal muscle transcriptomic response to inactivity and exercise.
                            Use MetaMEx to get a complete overview the behavior of a specific gene across
                                  all published exercise and inactivity transcriptomic studies. 
-                                MetaMEx v3.2207, last update July 2022"),
+                                MetaMEx v3.2208, last update August 2022"),
                              h4(style="color:white;font-weight:bold",
                                 actionLink(style="color:white;font:bold", 'jumpToHelp', 'Get help >'))
                              )

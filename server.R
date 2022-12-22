@@ -487,7 +487,7 @@ server <- function(input, output, session) {
                                    Duration %in% input$human_training_duration)
       #Function to make meta-analysis table (adds a row with meta-analysis score)
       metadata <- MetaAnalysis(selectedata, nrow(stats_human_TH))
-    }, error=function(e) NULL)
+    }, error = function(e) NULL)
   })
   
   output$plot_human_TH <- renderPlot({ 
@@ -506,22 +506,16 @@ server <- function(input, output, session) {
   
   data_human_overview <- reactive({
     
-    #create a NULL dataframe if data is not available
-    null_df <- data.frame(logFC = NA, adj.P.Val = NA,
-                          CI.L = NA, CI.R = NA,
-                          size = 0,
-                          Studies = "Meta-analysis score")
+    #collect data from the different reactives
+    data_human_AA <- data_human_AA()
+    data_human_AR <- data_human_AR()
+    data_human_AH <- data_human_AH()
+    data_human_IN <- data_human_IN()
+    data_human_TA <- data_human_TA()
+    data_human_TR <- data_human_TR()
+    data_human_TH <- data_human_TH()
+    data_human_TC <- data_human_TC()
     
-    # collect data from the different forest plots - if no data available in one group, replace with the empty dataframe
-    data_human_AA <- if(!is.na(data_human_AA())){ data_human_AA() } else null_df
-    data_human_AR <- if(!is.na(data_human_AR())){ data_human_AR() } else null_df
-    data_human_AH <- if(!is.na(data_human_AH())){ data_human_AH() } else null_df
-    data_human_IN <- if(!is.na(data_human_IN())){ data_human_IN() } else null_df
-    data_human_TA <- if(!is.na(data_human_TA())){ data_human_TA() } else null_df
-    data_human_TR <- if(!is.na(data_human_TR())){ data_human_TR() } else null_df
-    data_human_TH <- if(!is.na(data_human_TH())){ data_human_TH() } else null_df
-    data_human_TC <- if(!is.na(data_human_TC())){ data_human_TC() } else null_df
-
     # rename the datasets
     data_human_AA$Studies <- gsub("Meta-analysis score", "Acute Aerobic Meta-analysis", data_human_AA$Studies)
     data_human_AR$Studies <- gsub("Meta-analysis score", "Acute Resistance Meta-analysis", data_human_AR$Studies)
@@ -532,16 +526,23 @@ server <- function(input, output, session) {
     data_human_TC$Studies <- gsub("Meta-analysis score", "Training Combined Meta-analysis", data_human_TC$Studies)
     data_human_TH$Studies <- gsub("Meta-analysis score", "Training HIT Meta-analysis", data_human_TH$Studies)
     
-    # join everything in one table
-    overview_data <- rbind(data_human_AA,
-                           data_human_AR,
-                           data_human_AH,
-                           data_human_IN,
-                           data_human_TA,
-                           data_human_TR,
-                           data_human_TH,
-                           data_human_TC)
+    # join everything in one table - cannot use rbind in case one or several datsets are NA
+    overview_data <- full_join(data_human_AA,
+                               data_human_AR)
+    overview_data <- full_join(overview_data,
+                               data_human_AH)
+    overview_data <- full_join(overview_data,
+                               data_human_IN)
+    overview_data <- full_join(overview_data,
+                               data_human_TA)
+    overview_data <- full_join(overview_data,
+                               data_human_TR)
+    overview_data <- full_join(overview_data,
+                               data_human_TH)
+    overview_data <- full_join(overview_data,
+                               data_human_TC)
     
+    # remove NA in studies and subset with columns of interest
     overview_data <- overview_data[!is.na(overview_data$Studies),]
     overview_data <- overview_data[,c(6,1:5)]
     rownames(overview_data) <- c()
@@ -557,14 +558,12 @@ server <- function(input, output, session) {
     
     #select only meta-analysis scores for plotting
     overview_data <- overview_data[grepl("Meta-analysis", overview_data$Studies),]
-
+    
     # adjust groups and names
     overview_data$group <- gsub(" .*", "", overview_data$Studies)
     overview_data$Studies <- gsub(" Meta-analysis", "", overview_data$Studies)
     overview_data$Studies <- gsub(" ", "\n", overview_data$Studies)
-
     
-    # need data in at least one of the protocols to make a plot
     validate(need(sum(is.na(overview_data$logFC)) != length(overview_data$logFC),
                   "No studies found - try different selection criteria"))
     
@@ -581,7 +580,7 @@ server <- function(input, output, session) {
                                          "Not\nenough\nstudies\nincluded",
                                          overview_data$p.adj.signif)
     
-    overview_data$y.position <- overview_data$CI.R + 0.3
+    overview_data$y.position <- overview_data$CI.R + 0.5
     overview_data$y.position <- ifelse(is.na(overview_data$y.position),
                                        -1,
                                        overview_data$y.position)
@@ -610,10 +609,7 @@ server <- function(input, output, session) {
                  y.position = "y.position", 
                  label.size = 3) +
       scale_y_continuous(expand = expansion(mult = c(0.1, 0.15)))
-    
-    
-    
-  })
+    })
   
   
   
@@ -892,7 +888,7 @@ server <- function(input, output, session) {
     
     tryCatch({
         studies <- data.frame(colnames(correlations_data_human), 
-                         str_split_fixed(colnames(correlations_data_human), "_", 12)[,3:12])
+                              str_split_fixed(colnames(correlations_data_human), "_", 12)[,3:12])
         colnames(studies) <- c('FileName', 'Protocol', 'Exercisetype', 
                                'Muscle', 'Sex', 'Age', 'Training',
                                'Obesity', 'Disease', 'Biopsy', 'Duration')
@@ -931,13 +927,11 @@ server <- function(input, output, session) {
         validate(need(input$genename_metaanalysis_human == genename,     
                       "Please re-calculate correlation with the new selection "))
         
+        #functions used to calculate Spearman statistics
         estimate <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$estimate
         p.value  <- function(x) cor.test(x, geneofinterest, method="spearman", exact=F)$p.value
         
-        if(nrow(selectedata < 100)){
-          Spearman.r <- apply(selectedata[1:nrow(selectedata),], 1, estimate)
-          Spearman.p <- apply(selectedata[1:nrow(selectedata),], 1, p.value)
-        } else {
+        #Calculate correlations in batched of 100 for progress
         incProgress(0.4, detail="Spearman coefficients")
         Spearman.r1 <- apply(selectedata[1:1000,], 1, estimate)
         incProgress(0.4, detail="Spearman coefficients")
@@ -993,7 +987,8 @@ server <- function(input, output, session) {
         Spearman.p <- c(Spearman.p1, Spearman.p2, Spearman.p3, Spearman.p4,
                         Spearman.p5, Spearman.p6, Spearman.p7, Spearman.p8,
                         Spearman.p9, Spearman.p10, Spearman.p11, Spearman.p12)
-        }
+        
+        #make table with statistics
         incProgress(0.4, detail="Making table")
         Spearman.adj.P.Val <- p.adjust(Spearman.p, method="bonferroni")
         Spearman.r <- round(Spearman.r, digits=3)

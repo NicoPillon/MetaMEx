@@ -187,6 +187,7 @@ tabMetaanalysis_human <- tabPanel("Human", value="panelApp",
                                                                                                    selected=correlations_categories_human[['corr_protocol_choice']],
                                                                                                    inline = TRUE),
                                                                                 actionButton("updateCorrHuman", "Calculate", icon("sync")),
+                                                                                tags$em("Click 'calculate' after changing selection criteria to update your analysis."),
                                                                                 tags$br(), tags$br()
                                                                                 )
                                                                        ),
